@@ -1,262 +1,128 @@
 @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@600&family=Montserrat:wght@400&family=Roboto:wght@300&display=swap');
 
-:root {
-  --spotify-green: #1DB954;
-  --spotify-black: #191414;
-  --spotify-white: #FFFFFF;
-  --spotify-gray: #535353;
-  --spotify-light-gray: #B3B3B3;
-}
-
 body {
   margin: 0;
   font-family: 'Montserrat', sans-serif;
-  background-color: var(--spotify-black);
-  color: var(--spotify-white);
-  /* Altura mínima da viewport.
-     Usa 100dvh para melhor compatibilidade em dispositivos móveis,
-     considerando a altura dinâmica da viewport (incluindo barras do navegador). */
-  min-height: 100dvh;
-  display: flex;
-  /* Centraliza o conteúdo verticalmente */
-  align-items: center;
-  /* Centraliza o conteúdo horizontalmente */
-  justify-content: center;
-  /* Garante que o conteúdo role apenas se necessário, mas o container principal permanece centralizado */
-  overflow: auto;
-}
-
-.spotify-container {
+  background: linear-gradient(to bottom right, #212121, #333333); /* Fundo preto */
+  color: #e91e63; /* Detalhes em vermelho */
+  text-align: center;
   display: flex;
   flex-direction: column;
-  /* Remove a altura fixa para permitir que o conteúdo se ajuste */
-  /* height: 100vh; */
-  /* Adiciona uma altura máxima para evitar que ele fique muito grande em telas maiores */
-  max-height: 95dvh; /* Um pouco menos de 100dvh para dar um respiro */
-  padding: 20px;
-  background: linear-gradient(to bottom, #1E1E1E, #121212);
-  /* Adiciona um overflow para permitir rolagem dentro do container se o conteúdo for muito grande */
-  overflow-y: auto;
-  /* Largura máxima para desktops, mas flexível para mobile */
-  max-width: 600px; /* Ajuste conforme necessário */
-  width: 100%; /* Garante que ocupe toda a largura disponível no mobile */
-  box-sizing: border-box; /* Inclui padding e border na largura e altura */
-  border-radius: 10px; /* Mantém o border-radius */
-}
-
-.player-header {
-  display: flex;
   align-items: center;
-  margin-bottom: 30px;
-}
-
-.player-header h1 {
-  font-size: 24px;
-  margin-left: 15px;
-  color: var(--spotify-white);
-}
-
-.player-content {
-  display: flex;
-  /* Permite que o player-content cresça e ocupe o espaço restante */
-  flex: 1;
-  gap: 30px;
-  flex-wrap: wrap;
-  /* Permite rolagem dentro do player-content se necessário */
-  overflow-y: auto;
-  /* Garante que o player-content não force o container a ser maior do que a tela */
-  min-height: 0;
-}
-
-.album-art {
-  flex: 1;
-  display: flex;
   justify-content: center;
-  align-items: center;
-  /* Permite que a imagem se encolha se necessário */
-  min-width: 0;
+  padding: 2rem;
+  animation: fadeIn 2s ease-in;
 }
 
-.album-art img {
-  width: 100%;
-  max-width: 400px;
-  /* Ajusta a altura máxima para ser mais flexível,
-     permitindo que a imagem se ajuste melhor sem rolar */
-  max-height: 50vh; /* Ajuste conforme necessário */
-  object-fit: contain;
-  border-radius: 10px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-.lyrics-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0 30px;
-  /* Permite que o container de letras se encolha */
-  min-width: 0;
-  min-height: 0; /* Garante que o container de letras não force o pai a expandir */
+.container {
+  background: #121212; /* Fundo preto */
+  border: 6px double #e91e63; /* Detalhes em vermelho */
+  border-radius: 24px;
+  padding: 2rem;
+  max-width: 800px;
+  box-shadow: 0 0 30px rgba(255, 0, 0, 0.3); /* Sombra vermelha */
+  margin: 2rem;
+  animation: zoomIn 1.5s ease;
 }
 
-.song-info {
-  margin-bottom: 30px;
+@keyframes zoomIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
 
-.song-title {
+h1 {
   font-family: 'Great Vibes', cursive;
-  font-size: 36px;
-  color: #f48fb1;
-  margin-bottom: 5px;
+  font-size: 3.5rem;
+  margin-bottom: 0.5rem;
+  color: #ff0000; /* Vermelho intenso */
+  text-shadow: 2px 2px #000; /* Sombra preta */
 }
 
-.song-artist {
-  font-size: 18px;
-  color: var(--spotify-light-gray);
+.intro {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.4rem;
+  margin-bottom: 2rem;
+  color: #ff4081; /* Vermelho suave */
 }
 
-.lyrics {
-  /* Remove a altura fixa e usa flex-grow para ocupar o espaço disponível */
-  height: auto;
-  flex-grow: 1;
-  overflow-y: auto;
-  padding-right: 15px;
-  /* Garante que o scrollbar apareça apenas quando necessário */
-  -webkit-overflow-scrolling: touch; /* Melhora o scroll em iOS */
-}
-
-.lyrics p {
-  font-size: 18px;
-  line-height: 1.6;
-  margin-bottom: 20px;
-  color: var(--spotify-light-gray);
-}
-
-.lyrics .highlight {
-  color: var(--spotify-white);
-  font-weight: bold;
-}
-
-.player-controls {
-  background-color: var(--spotify-gray);
-  padding: 20px;
-  border-radius: 10px;
-  margin-top: 30px;
-  /* Garante que os controles não ocupem mais espaço do que o necessário */
-  flex-shrink: 0;
-}
-
-.progress-container {
-  display: flex;
-  align-items: center;
-  margin-bottom: 15px;
-  justify-content: center;
-}
-
-.progress-bar {
-  flex: 1;
-  height: 4px;
-  background-color: #535353;
-  border-radius: 2px;
-  cursor: pointer;
-  max-width: 100%;
-}
-
-.progress {
-  height: 100%;
-  background-color: var(--spotify-green);
-  border-radius: 2px;
-  width: 30%;
-}
-
-.controls {
+.slideshow {
+  width: 90%;
+  max-width: 600px;
+  margin: 0 auto 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 25px;
-  flex-wrap: wrap;
 }
 
-.control-btn {
+.slideshow img {
+  width: 100%;
+  border-radius: 24px;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.6); /* Sombra mais forte */
+  transition: opacity 1s ease-in-out;
+  border: 3px solid #e91e63; /* Borda vermelha */
+}
+
+audio {
+  margin-top: 1rem;
+  filter: drop-shadow(0 0 5px #e91e63); /* Efeito de sombra vermelha */
+}
+
+/* Estilos personalizados para frases */
+.frase1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  color: #ff1744; /* Vermelho escuro */
+  margin-bottom: 1rem;
+  text-shadow: 1px 1px #fff;
+}
+
+.frase2 {
+  font-family: 'Great Vibes', cursive;
+  font-size: 2.2rem;
+  color: #ff4081; /* Vermelho suave */
+  margin-bottom: 1.2rem;
+}
+
+.frase3 {
+  font-family: 'Roboto', sans-serif;
+  font-style: italic;
+  font-size: 1.3rem;
+  color: #ff80ab; /* Vermelho claro */
+  margin-bottom: 1.5rem;
+}
+
+/* Ícones decorativos */
+.icone {
+  font-size: 2rem;
+  margin: 0.5rem;
+  color: #ff4f81; /* Detalhes em vermelho */
+  transition: transform 0.3s ease;
+}
+
+.icone:hover {
+  transform: scale(1.2);
+}
+
+/* Estilos para o botão de controle do áudio */
+.audio-btn {
   background: none;
   border: none;
-  color: var(--spotify-white);
-  font-size: 20px;
+  color: #e91e63; /* Vermelho para o ícone */
+  font-size: 2.5rem;
   cursor: pointer;
+  transition: transform 0.3s ease;
+  margin-top: 1rem;
 }
 
-.play-btn {
-  background-color: var(--spotify-white);
-  color: var(--spotify-black);
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 24px;
+.audio-btn:hover {
+  transform: scale(1.1);
 }
 
-/* Remove barra de volume */
-.volume-control {
-  display: none;
-}
-
-/* Remove os tempos */
-.progress-time {
-  display: none;
-}
-
-/* Animação para o destaque das letras */
-@keyframes fadeHighlight {
-  0% { opacity: 0.5; }
-  50% { opacity: 1; }
-  100% { opacity: 0.5; }
-}
-
-.highlight {
-  animation: fadeHighlight 2s infinite;
-}
-
-/* RESPONSIVO */
-@media (max-width: 768px) {
-  .player-content {
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .lyrics-container {
-    padding: 0;
-  }
-
-  .song-title {
-    font-size: 28px;
-    text-align: center;
-  }
-
-  .song-artist {
-    text-align: center;
-  }
-
-  .lyrics {
-    /* Ajusta a altura máxima para que as letras não ocupem todo o espaço
-       e dêem visibilidade à imagem e controles */
-    max-height: 150px; /* Reduzido para dar mais espaço à imagem e controles */
-    /* Garante que as letras rolagem se houver muito conteúdo */
-    overflow-y: auto;
-  }
-
-  .controls {
-    gap: 15px;
-  }
-
-  .album-art img {
-    width: 90%;
-    /* Ajusta a altura máxima para ser mais flexível em telas menores */
-    max-height: 40vh; /* Ajuste conforme necessário */
-  }
-
-  .spotify-container {
-    padding: 15px; /* Reduz o padding para mobile */
-  }
+.audio-btn i {
+  font-size: 2.5rem;
 }
