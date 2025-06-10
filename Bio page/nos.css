@@ -1,217 +1,241 @@
+/* Estilos CSS Base */
 @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@600&family=Montserrat:wght@400&family=Roboto:wght@300&display=swap');
 
+/* Variáveis CSS para cores do Spotify */
 :root {
-  --spotify-green: #1DB954;
-  --spotify-black: #191414;
-  --spotify-white: #FFFFFF;
-  --spotify-gray: #535353;
-  --spotify-light-gray: #B3B3B3;
+    --spotify-green: #1DB954;
+    --spotify-black: #191414;
+    --spotify-white: #FFFFFF;
+    --spotify-gray: #535353;
+    --spotify-light-gray: #B3B3B3;
 }
 
+/* Estilos globais do corpo da página */
 body {
-  margin: 0;
-  font-family: 'Montserrat', sans-serif;
-  background-color: var(--spotify-black);
-  color: var(--spotify-white);
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--spotify-black);
+    color: var(--spotify-white);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Evita barras de rolagem indesejadas */
 }
 
+/* Contêiner principal, simula a interface do Spotify */
 .spotify-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  padding: 20px;
-  background: linear-gradient(to bottom, #1E1E1E, #121212);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 20px;
+    background: linear-gradient(to bottom, #1E1E1E, #121212);
+    box-sizing: border-box; /* Inclui padding na altura total */
 }
 
+/* Cabeçalho do player */
 .player-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.player-header .spotify-icon {
+    font-size: 30px;
+    color: var(--spotify-green);
 }
 
 .player-header h1 {
-  font-size: 24px;
-  margin-left: 15px;
-  color: var(--spotify-white);
+    font-size: 24px;
+    margin-left: 15px;
+    color: var(--spotify-white);
 }
 
+/* Conteúdo principal do player: arte do álbum e letras */
 .player-content {
-  display: flex;
-  flex: 1;
-  gap: 30px;
-  flex-wrap: wrap;
+    display: flex;
+    flex: 1;
+    gap: 30px;
+    flex-wrap: wrap; /* Permite que os itens quebrem a linha */
+    justify-content: center; /* Centraliza itens horizontalmente */
+    align-items: center; /* Centraliza itens verticalmente */
+    overflow: hidden; /* Esconde conteúdo que exceda */
 }
 
+/* Seção da arte do álbum */
 .album-art {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 280px; /* Largura mínima para mobile */
+    max-width: 450px; /* Largura máxima para desktop */
+    box-sizing: border-box;
 }
 
 .album-art img {
-  width: 100%;
-  max-width: 400px;
-  max-height: 80vh;
-  object-fit: contain;
-  border-radius: 10px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 400px;
+    max-height: 70vh; /* Ajusta altura da imagem à viewport */
+    object-fit: contain;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
+/* Contêiner das letras da música */
 .lyrics-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0 30px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 30px;
+    min-width: 280px; /* Largura mínima para mobile */
+    box-sizing: border-box;
 }
 
+/* Informações da música */
 .song-info {
-  margin-bottom: 30px;
+    margin-bottom: 30px;
 }
 
 .song-title {
-  font-family: 'Great Vibes', cursive;
-  font-size: 36px;
-  color: #f48fb1;
-  margin-bottom: 5px;
+    font-family: 'Great Vibes', cursive;
+    font-size: 36px;
+    color: #f48fb1;
+    margin-bottom: 5px;
+    text-align: center;
 }
 
 .song-artist {
-  font-size: 18px;
-  color: var(--spotify-light-gray);
+    font-size: 18px;
+    color: var(--spotify-light-gray);
+    text-align: center;
 }
 
+/* Área das letras */
 .lyrics {
-  height: 300px;
-  overflow-y: auto;
-  padding-right: 15px;
+    height: 300px;
+    overflow-y: auto; /* Permite rolagem */
+    padding-right: 15px;
+    text-align: center;
 }
 
 .lyrics p {
-  font-size: 18px;
-  line-height: 1.6;
-  margin-bottom: 20px;
-  color: var(--spotify-light-gray);
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    color: var(--spotify-light-gray);
 }
 
+/* Estilo para destaque das letras */
 .lyrics .highlight {
-  color: var(--spotify-white);
-  font-weight: bold;
+    color: var(--spotify-white);
+    font-weight: bold;
+    transition: color 0.3s ease-in-out;
 }
 
-.player-controls {
-  background-color: var(--spotify-gray);
-  padding: 20px;
-  border-radius: 10px;
-  margin-top: 30px;
+/* Botão de play/pause fixo no canto inferior direito */
+.fixed-play-button-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 99;
 }
 
-.progress-container {
-  display: flex;
-  align-items: center;
-  margin-bottom: 15px;
-  justify-content: center;
+.play-btn-fixed {
+    background-color: var(--spotify-green);
+    color: var(--spotify-white);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 28px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease-in-out;
 }
 
-.progress-bar {
-  flex: 1;
-  height: 4px;
-  background-color: #535353;
-  border-radius: 2px;
-  cursor: pointer;
-  max-width: 100%;
-}
-
-.progress {
-  height: 100%;
-  background-color: var(--spotify-green);
-  border-radius: 2px;
-  width: 30%;
-}
-
-.controls {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 25px;
-  flex-wrap: wrap;
-}
-
-.control-btn {
-  background: none;
-  border: none;
-  color: var(--spotify-white);
-  font-size: 20px;
-  cursor: pointer;
-}
-
-.play-btn {
-  background-color: var(--spotify-white);
-  color: var(--spotify-black);
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 24px;
-}
-
-/* Remove barra de volume */
-.volume-control {
-  display: none;
-}
-
-/* Remove os tempos */
-.progress-time {
-  display: none;
+.play-btn-fixed:hover {
+    transform: scale(1.05);
 }
 
 /* Animação para o destaque das letras */
 @keyframes fadeHighlight {
-  0% { opacity: 0.5; }
-  50% { opacity: 1; }
-  100% { opacity: 0.5; }
+    0% { opacity: 0.7; }
+    50% { opacity: 1; }
+    100% { opacity: 0.7; }
 }
 
 .highlight {
-  animation: fadeHighlight 2s infinite;
+    animation: fadeHighlight 2s infinite alternate;
 }
 
-/* RESPONSIVO */
+/* Design responsivo para telas menores (até 768px de largura) */
 @media (max-width: 768px) {
-  .player-content {
-    flex-direction: column;
-    gap: 20px;
-  }
+    .spotify-container {
+        padding: 15px; /* Ajusta o padding para telas menores */
+    }
 
-  .lyrics-container {
-    padding: 0;
-  }
+    .player-header {
+        margin-bottom: 20px;
+    }
 
-  .song-title {
-    font-size: 28px;
-    text-align: center;
-  }
+    .player-header h1 {
+        font-size: 20px; /* Reduz o tamanho do título */
+    }
 
-  .song-artist {
-    text-align: center;
-  }
+    .player-header .spotify-icon {
+        font-size: 25px; /* Reduz o tamanho do ícone */
+    }
 
-  .lyrics {
-    max-height: 250px;
-  }
+    .player-content {
+        flex-direction: column; /* Organiza conteúdo em coluna */
+        gap: 20px;
+    }
 
-  .controls {
-    gap: 15px;
-  }
+    .album-art {
+        min-width: unset; /* Remove largura mínima */
+        max-width: 90%; /* Ajusta a largura da imagem */
+    }
 
-  .album-art img {
-    width: 90%;
-    max-height: 60vh;
-  }
+    .album-art img {
+        max-width: 90%;
+        max-height: 45vh; /* Ajusta a altura da imagem */
+    }
+
+    .lyrics-container {
+        padding: 0 10px; /* Reduz padding lateral */
+        min-width: unset; /* Remove largura mínima */
+        height: auto; /* Altura flexível para as letras */
+    }
+
+    .song-info {
+        margin-bottom: 20px;
+    }
+
+    .song-title {
+        font-size: 28px; /* Reduz o tamanho da fonte do título */
+    }
+
+    .song-artist {
+        font-size: 16px; /* Reduz o tamanho da fonte do artista */
+    }
+
+    .lyrics {
+        max-height: 180px; /* Reduz a altura máxima das letras */
+        font-size: 16px; /* Reduz o tamanho da fonte das letras */
+        padding-right: 5px; /* Ajusta padding para rolagem */
+    }
+
+    .lyrics p {
+        margin-bottom: 15px; /* Reduz o espaçamento entre parágrafos */
+    }
+
+    .play-btn-fixed {
+        width: 50px; /* Reduz o tamanho do botão fixo */
+        height: 50px;
+        font-size: 24px;
+    }
 }
