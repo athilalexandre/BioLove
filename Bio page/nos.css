@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@600&family=Montserrat:wght@400&family=Roboto:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@600&family=Montserrat:wght@400&family=Roboto:300&display=swap');
 
 :root {
   --spotify-green: #1DB950;
@@ -28,7 +28,7 @@ body {
   max-height: 98dvh; /* Garante que o container ocupe a altura disponível na viewport */
   padding: 20px;
   background: linear-gradient(to bottom, #1E1E1E, #121212);
-  /* Ajusta a largura para ter um respiro nas laterais, especialmente em telas menores */
+  /* Use uma largura fixa para o mobile e centralize com margin: auto */
   width: calc(100% - 40px); /* 100% da largura menos 20px de padding de cada lado */
   max-width: 600px; /* Limita a largura máxima em telas grandes */
   box-sizing: border-box; /* Inclui padding e border na largura/altura */
@@ -106,6 +106,8 @@ body {
   height: auto;
   margin: 0;
   padding: 0;
+  padding-top: 20px; /* Adiciona um espaço no topo das frases, pulando o parágrafo */
+  padding-bottom: 20px; /* Adiciona espaço na parte inferior para rolagem */
 }
 
 .lyrics p {
@@ -173,7 +175,9 @@ body {
 @media (max-width: 768px) {
   .spotify-container {
     padding: 15px; /* Reduz o padding para telas menores */
-    width: calc(100% - 30px); /* Ajusta a largura para mobile com padding */
+    /* Ajustado para usar 90% da largura e centralizar com margin auto */
+    width: 90%;
+    margin: 0 auto; /* Centraliza horizontalmente */
   }
 
   .player-header {
@@ -205,6 +209,11 @@ body {
     font-size: 14px;
   }
 
+  .lyrics {
+    padding-top: 15px; /* Ajusta o padding para mobile */
+    padding-bottom: 15px;
+  }
+
   .lyrics p {
     font-size: 16px; /* Tamanho de fonte menor para as frases em mobile */
     margin-bottom: 8px;
@@ -227,7 +236,8 @@ body {
   .spotify-container {
     max-height: 98vh; /* Garante que o container ocupe a altura disponível */
     padding: 10px;
-    width: calc(100% - 20px);
+    width: 95%; /* Levemente mais largo em telas baixas para otimizar espaço */
+    margin: 0 auto; /* Centraliza */
   }
 
   .player-header {
@@ -252,6 +262,11 @@ body {
 
   .song-artist {
     font-size: 12px;
+  }
+
+  .lyrics {
+    padding-top: 10px; /* Reduz o padding superior em telas muito baixas */
+    padding-bottom: 10px;
   }
 
   .lyrics p {
