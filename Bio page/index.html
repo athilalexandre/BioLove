@@ -26,12 +26,25 @@
         </div>
 
         <div class="lyrics" id="lyrics">
-                  </div>
+          <p>O nosso amor é a melhor coisa que me aconteceu</p>
+            <p>Cada momento contigo é especial</p>
+            <p>Você é meu hoje e sempre</p>
+            <p>Juntos somos mais fortes</p>
+            <p>Te amo mais que tudo nesse mundo</p>
+            <p>Você completa minha vida</p>
+            <p>Nossa história é meu conto favorito</p>
+            <p>Seu sorriso ilumina meus dias</p>
+            <p>Encontrei em você meu porto seguro</p>
+        </div>
       </div>
     </div>
 
     <div class="initial-play-button-container" id="initial-play-button-container">
         <button class="control-btn play-btn" id="play-btn-initial"><i class="fas fa-play"></i></button>
+    </div>
+
+    <div class="fixed-play-button-container">
+        <button class="play-btn-fixed" id="play-btn-fixed"><i class="fas fa-play"></i></button>
     </div>
 
   <audio id="audio" loop>
@@ -40,10 +53,11 @@
 
   <script>
     const audio = document.getElementById('audio');
-    const playBtnInitial = document.getElementById('play-btn-initial'); // Novo botão
-    const initialPlayButtonContainer = document.getElementById('initial-play-button-container'); // Novo container
+    const playBtnFixed = document.getElementById('play-btn-fixed'); // Novo botão fixo
+    const initialPlayButtonContainer = document.getElementById('initial-play-button-container'); // Mantido para esconder via JS
     const lyricsContainer = document.getElementById('lyrics');
     const slide = document.getElementById('slide');
+    const lyricParagraphs = document.querySelectorAll('#lyrics p'); // Seleciona todos os parágrafos de letras
 
     const frases = [
       "O nosso amor é a melhor coisa que me aconteceu",
@@ -65,48 +79,40 @@
 
     let currentSlide = 0;
 
+    // displayLyrics agora só gerencia o destaque, não cria os elementos
     function displayLyrics() {
-      if (!document.getElementById('current-lyric')) {
-        const p = document.createElement('p');
-        p.id = 'current-lyric';
-        lyricsContainer.appendChild(p);
+      // Remove destaque de todos os parágrafos
+      lyricParagraphs.forEach(p => p.classList.remove('highlight'));
+      // Adiciona destaque ao parágrafo atual
+      if (lyricParagraphs[currentSlide]) {
+        lyricParagraphs[currentSlide].classList.add('highlight');
+        // Opcional: Scrolar para a frase atual se o container tiver overflow
+        lyricParagraphs[currentSlide].scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
-      document.getElementById('current-lyric').textContent = frases[currentSlide];
-      document.getElementById('current-lyric').classList.add('highlight');
     }
 
     function rotateContent() {
       currentSlide = (currentSlide + 1) % slides.length;
       slide.src = slides[currentSlide];
-
-      const currentLyricElement = document.getElementById('current-lyric');
-      if (currentLyricElement) {
-        currentLyricElement.classList.remove('highlight');
-        setTimeout(() => {
-          currentLyricElement.textContent = frases[currentSlide];
-          currentLyricElement.classList.add('highlight');
-        }, 100);
-      }
+      displayLyrics(); // Chama displayLyrics para atualizar o destaque
     }
 
-    // Event listener para o novo botão de Play/Pause
-    playBtnInitial.addEventListener('click', () => {
+    // Event listener para o novo botão de Play/Pause fixo
+    playBtnFixed.addEventListener('click', () => {
         if (audio.paused) {
             audio.play();
-            playBtnInitial.innerHTML = '<i class="fas fa-pause"></i>';
-            initialPlayButtonContainer.style.display = 'none'; // Esconde o botão após o play
+            playBtnFixed.innerHTML = '<i class="fas fa-pause"></i>';
         } else {
             audio.pause();
-            playBtnInitial.innerHTML = '<i class="fas fa-play"></i>';
-            initialPlayButtonContainer.style.display = 'flex'; // Mostra o botão ao pausar
+            playBtnFixed.innerHTML = '<i class="fas fa-play"></i>';
         }
     });
 
-    displayLyrics();
-    setInterval(rotateContent, 3500);
+    // Esconde o container do botão de autoplay inicial (garante que não apareça)
+    initialPlayButtonContainer.style.display = 'none';
 
-    // Remove o listener de 'load' para autoplay, pois agora temos um botão
-    // window.addEventListener('load', () => { ... });
+    displayLyrics(); // Exibe a primeira frase no carregamento
+    setInterval(rotateContent, 3500); // Inicia a rotação de conteúdo
   </script>
 </body>
 </html>
