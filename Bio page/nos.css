@@ -1,11 +1,13 @@
-/* Reset Básico para garantir consistência */
+/* Reset Básico e ajustes de viewport mais agressivos */
 html, body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* Previne rolagem horizontal indesejada que pode causar "espaço à esquerda" */
+  overflow-x: hidden; /* **Essencial para remover qualquer rolagem horizontal indesejada** */
+  width: 100vw; /* Garante que HTML e Body ocupem exatamente 100% da largura da viewport */
+  height: 100dvh; /* Garante 100% da altura da viewport dinâmica */
 }
 * {
-  box-sizing: border-box; /* Garante que padding e border sejam incluídos na largura/altura */
+  box-sizing: border-box; /* Crucial para garantir que padding e border sejam incluídos na largura/altura de todos os elementos */
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@600&family=Montserrat:wght@400&family=Roboto:300&display=swap');
@@ -190,7 +192,7 @@ body {
 @media (max-width: 768px) {
   .spotify-container {
     padding: 15px; /* Reduz o padding para telas menores */
-    width: 90%; /* Usa 90% da largura e centraliza com margin auto */
+    width: 95%; /* Aumentado para 95% para consumir mais espaço e centralizar melhor */
     margin: 0 auto; /* Centraliza horizontalmente */
   }
 
@@ -255,7 +257,7 @@ body {
   .spotify-container {
     max-height: 98vh; /* Garante que o container ocupe a altura disponível */
     padding: 10px;
-    width: 95%; /* Levemente mais largo em telas baixas para otimizar espaço */
+    width: 98%; /* Ainda mais largo para telas muito baixas, quase 100% */
     margin: 0 auto; /* Centraliza */
   }
 
