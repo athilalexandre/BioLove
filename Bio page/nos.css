@@ -1,128 +1,217 @@
 @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@600&family=Montserrat:wght@400&family=Roboto:wght@300&display=swap');
 
+:root {
+  --spotify-green: #1DB954;
+  --spotify-black: #191414;
+  --spotify-white: #FFFFFF;
+  --spotify-gray: #535353;
+  --spotify-light-gray: #B3B3B3;
+}
+
 body {
   margin: 0;
   font-family: 'Montserrat', sans-serif;
-  background: linear-gradient(to bottom right, #212121, #333333); /* Fundo preto */
-  color: #e91e63; /* Detalhes em vermelho */
-  text-align: center;
+  background-color: var(--spotify-black);
+  color: var(--spotify-white);
+  height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+.spotify-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 20px;
+  background: linear-gradient(to bottom, #1E1E1E, #121212);
+}
+
+.player-header {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  animation: fadeIn 2s ease-in;
+  margin-bottom: 30px;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.player-header h1 {
+  font-size: 24px;
+  margin-left: 15px;
+  color: var(--spotify-white);
 }
 
-.container {
-  background: #121212; /* Fundo preto */
-  border: 6px double #e91e63; /* Detalhes em vermelho */
-  border-radius: 24px;
-  padding: 2rem;
-  max-width: 800px;
-  box-shadow: 0 0 30px rgba(255, 0, 0, 0.3); /* Sombra vermelha */
-  margin: 2rem;
-  animation: zoomIn 1.5s ease;
+.player-content {
+  display: flex;
+  flex: 1;
+  gap: 30px;
+  flex-wrap: wrap;
 }
 
-@keyframes zoomIn {
-  from { transform: scale(0.95); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-h1 {
-  font-family: 'Great Vibes', cursive;
-  font-size: 3.5rem;
-  margin-bottom: 0.5rem;
-  color: #ff0000; /* Vermelho intenso */
-  text-shadow: 2px 2px #000; /* Sombra preta */
-}
-
-.intro {
-  font-family: 'Roboto', sans-serif;
-  font-size: 1.4rem;
-  margin-bottom: 2rem;
-  color: #ff4081; /* Vermelho suave */
-}
-
-.slideshow {
-  width: 90%;
-  max-width: 600px;
-  margin: 0 auto 2rem;
+.album-art {
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.slideshow img {
+.album-art img {
   width: 100%;
-  border-radius: 24px;
-  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.6); /* Sombra mais forte */
-  transition: opacity 1s ease-in-out;
-  border: 3px solid #e91e63; /* Borda vermelha */
+  max-width: 400px;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-audio {
-  margin-top: 1rem;
-  filter: drop-shadow(0 0 5px #e91e63); /* Efeito de sombra vermelha */
+.lyrics-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 30px;
 }
 
-/* Estilos personalizados para frases */
-.frase1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.6rem;
-  color: #ff1744; /* Vermelho escuro */
-  margin-bottom: 1rem;
-  text-shadow: 1px 1px #fff;
+.song-info {
+  margin-bottom: 30px;
 }
 
-.frase2 {
+.song-title {
   font-family: 'Great Vibes', cursive;
-  font-size: 2.2rem;
-  color: #ff4081; /* Vermelho suave */
-  margin-bottom: 1.2rem;
+  font-size: 36px;
+  color: #f48fb1;
+  margin-bottom: 5px;
 }
 
-.frase3 {
-  font-family: 'Roboto', sans-serif;
-  font-style: italic;
-  font-size: 1.3rem;
-  color: #ff80ab; /* Vermelho claro */
-  margin-bottom: 1.5rem;
+.song-artist {
+  font-size: 18px;
+  color: var(--spotify-light-gray);
 }
 
-/* Ícones decorativos */
-.icone {
-  font-size: 2rem;
-  margin: 0.5rem;
-  color: #ff4f81; /* Detalhes em vermelho */
-  transition: transform 0.3s ease;
+.lyrics {
+  height: 300px;
+  overflow-y: auto;
+  padding-right: 15px;
 }
 
-.icone:hover {
-  transform: scale(1.2);
+.lyrics p {
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  color: var(--spotify-light-gray);
 }
 
-/* Estilos para o botão de controle do áudio */
-.audio-btn {
+.lyrics .highlight {
+  color: var(--spotify-white);
+  font-weight: bold;
+}
+
+.player-controls {
+  background-color: var(--spotify-gray);
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 30px;
+}
+
+.progress-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  justify-content: center;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 4px;
+  background-color: #535353;
+  border-radius: 2px;
+  cursor: pointer;
+  max-width: 100%;
+}
+
+.progress {
+  height: 100%;
+  background-color: var(--spotify-green);
+  border-radius: 2px;
+  width: 30%;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  flex-wrap: wrap;
+}
+
+.control-btn {
   background: none;
   border: none;
-  color: #e91e63; /* Vermelho para o ícone */
-  font-size: 2.5rem;
+  color: var(--spotify-white);
+  font-size: 20px;
   cursor: pointer;
-  transition: transform 0.3s ease;
-  margin-top: 1rem;
 }
 
-.audio-btn:hover {
-  transform: scale(1.1);
+.play-btn {
+  background-color: var(--spotify-white);
+  color: var(--spotify-black);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
 }
 
-.audio-btn i {
-  font-size: 2.5rem;
+/* Remove barra de volume */
+.volume-control {
+  display: none;
+}
+
+/* Remove os tempos */
+.progress-time {
+  display: none;
+}
+
+/* Animação para o destaque das letras */
+@keyframes fadeHighlight {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+
+.highlight {
+  animation: fadeHighlight 2s infinite;
+}
+
+/* RESPONSIVO */
+@media (max-width: 768px) {
+  .player-content {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .lyrics-container {
+    padding: 0;
+  }
+
+  .song-title {
+    font-size: 28px;
+    text-align: center;
+  }
+
+  .song-artist {
+    text-align: center;
+  }
+
+  .lyrics {
+    max-height: 250px;
+  }
+
+  .controls {
+    gap: 15px;
+  }
+
+  .album-art img {
+    width: 90%;
+    max-height: 60vh;
+  }
 }
