@@ -30,26 +30,14 @@
       </div>
     </div>
 
-    <div class="player-controls">
-      <div class="progress-container">
-        <div class="progress-bar">
-          <div class="progress"></div>
-        </div>
-      </div>
-
-      <div class="controls">
-                <button class="control-btn play-btn" id="play-btn"><i class="fas fa-play"></i></button>
-      </div>
-    </div>
-  </div>
-
-  <audio id="audio" loop>
+          <audio id="audio" loop>
     <source src="audio/always.mp3" type="audio/mpeg" />
   </audio>
 
   <script>
     const audio = document.getElementById('audio');
-    const playBtn = document.getElementById('play-btn');
+    // playBtn não é mais necessário se não houver um botão de play visível
+    // const playBtn = document.getElementById('play-btn'); 
     const lyricsContainer = document.getElementById('lyrics');
     const slide = document.getElementById('slide');
 
@@ -102,25 +90,40 @@
       }
     }
 
-    playBtn.addEventListener('click', () => {
-      if (audio.paused) {
-        audio.play();
-        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-      } else {
-        audio.pause();
-        playBtn.innerHTML = '<i class="fas fa-play"></i>';
-      }
-    });
+    // REMOVENDO O EVENT LISTENER DO BOTÃO DE PLAY
+    // playBtn.addEventListener('click', () => {
+    //   if (audio.paused) {
+    //     audio.play();
+    //     playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+    //   } else {
+    //     audio.pause();
+    //     playBtn.innerHTML = '<i class="fas fa-play"></i>';
+    //   }
+    // });
+
+    // Inicia a música automaticamente ao carregar a página
+    // Adicionado um pequeno atraso e verificação para compatibilidade com autoplay
+    window.addEventListener('load', () => {
+      audio.play().then(() => {
+        // Áudio iniciado com sucesso
+      }).catch(e => {
+        // Se autoplay for bloqueado, loga o erro (comum em alguns navegadores)
+        console.log('Reprodução automática bloqueada:', e);
+        // Opcional: Aqui você pode mostrar um botão de play/pause caso o autoplay falhe.
+      });
+    });
+
 
     // Chama displayLyrics no início para carregar a primeira frase
     displayLyrics();
     setInterval(rotateContent, 3500);
 
-    document.addEventListener('click', () => {
-      audio.play().then(() => {
-        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-      }).catch(e => console.log('Reprodução automática bloqueada:', e));
-    }, { once: true });
+    // REMOVENDO O EVENT LISTENER DO DOCUMENTO PARA AUTOPLAY INICIAL
+    // document.addEventListener('click', () => {
+    //   audio.play().then(() => {
+    //     playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+    //   }).catch(e => console.log('Reprodução automática bloqueada:', e));
+    // }, { once: true });
   </script>
 </body>
 </html>
