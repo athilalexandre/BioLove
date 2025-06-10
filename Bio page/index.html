@@ -1,124 +1,130 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Para Nós Dois 💖</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="nos.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Para Nós Dois 💖</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="nos.css">
 </head>
 <body>
-  <div class="spotify-container">
-    <div class="player-header">
-      <i class="fab fa-spotify" style="font-size: 36px; color: var(--spotify-green);"></i>
-      <h1>Nosso Amor</h1>
-    </div>
+  <div class="spotify-container">
+    <div class="player-header">
+      <i class="fab fa-spotify" style="font-size: 36px; color: var(--spotify-green);"></i>
+      <h1>Nosso Amor</h1>
+    </div>
 
-    <div class="player-content">
-      <div class="album-art">
-        <img id="slide" src="imgs/slide1.jpg" alt="Nossos Momentos">
-      </div>
+    <div class="player-content">
+      <div class="album-art">
+        <img id="slide" src="imgs/slide1.jpg" alt="Nossos Momentos">
+      </div>
 
-      <div class="lyrics-container">
-        <div class="song-info">
-          <div class="song-title">Sempre Juntos</div>
-          <div class="song-artist">Nossa História</div>
-        </div>
+      <div class="lyrics-container">
+        <div class="song-info">
+          <div class="song-title">Sempre Juntos</div>
+          <div class="song-artist">Nossa História</div>
+        </div>
 
-        <div class="lyrics" id="lyrics">
-          <!-- As frases serão inseridas aqui pelo JavaScript -->
-        </div>
-      </div>
-    </div>
+        <div class="lyrics" id="lyrics">
+                  </div>
+      </div>
+    </div>
 
-    <div class="player-controls">
-      <div class="progress-container">
-        <div class="progress-bar">
-          <div class="progress"></div>
-        </div>
-      </div>
+    <div class="player-controls">
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress"></div>
+        </div>
+      </div>
 
-      <div class="controls">
-        <button class="control-btn"><i class="fas fa-random"></i></button>
-        <button class="control-btn"><i class="fas fa-step-backward"></i></button>
-        <button class="control-btn play-btn" id="play-btn"><i class="fas fa-play"></i></button>
-        <button class="control-btn"><i class="fas fa-step-forward"></i></button>
-        <button class="control-btn"><i class="fas fa-redo"></i></button>
-      </div>
-    </div>
-  </div>
+      <div class="controls">
+        <button class="control-btn"><i class="fas fa-random"></i></button>
+        <button class="control-btn"><i class="fas fa-step-backward"></i></button>
+        <button class="control-btn play-btn" id="play-btn"><i class="fas fa-play"></i></button>
+        <button class="control-btn"><i class="fas fa-step-forward"></i></button>
+        <button class="control-btn"><i class="fas fa-redo"></i></button>
+      </div>
+    </div>
+  </div>
 
-  <audio id="audio" loop>
-    <source src="audio/always.mp3" type="audio/mpeg" />
-  </audio>
+  <audio id="audio" loop>
+    <source src="audio/always.mp3" type="audio/mpeg" />
+  </audio>
 
-  <script>
-    const audio = document.getElementById('audio');
-    const playBtn = document.getElementById('play-btn');
-    const lyricsContainer = document.getElementById('lyrics');
-    const slide = document.getElementById('slide');
+  <script>
+    const audio = document.getElementById('audio');
+    const playBtn = document.getElementById('play-btn');
+    const lyricsContainer = document.getElementById('lyrics');
+    const slide = document.getElementById('slide');
 
-    const frases = [
-      "O nosso amor é a melhor coisa que me aconteceu",
-      "Cada momento contigo é especial",
-      "Você é meu hoje e sempre",
-      "Juntos somos mais fortes",
-      "Te amo mais que tudo nesse mundo",
-      "Você completa minha vida",
-      "Nossa história é meu conto favorito",
-      "Seu sorriso ilumina meus dias",
-      "Encontrei em você meu porto seguro"
-    ];
+    const frases = [
+      "O nosso amor é a melhor coisa que me aconteceu",
+      "Cada momento contigo é especial",
+      "Você é meu hoje e sempre",
+      "Juntos somos mais fortes",
+      "Te amo mais que tudo nesse mundo",
+      "Você completa minha vida",
+      "Nossa história é meu conto favorito",
+      "Seu sorriso ilumina meus dias",
+      "Encontrei em você meu porto seguro"
+    ];
 
-    const slides = [
-      "imgs/slide1.jpg", "imgs/slide2.jpg", "imgs/slide3.jpg",
-      "imgs/slide4.jpg", "imgs/slide5.jpg", "imgs/slide6.jpg",
-      "imgs/slide7.jpg", "imgs/slide8.jpg", "imgs/slide9.jpg"
-    ];
+    const slides = [
+      "imgs/slide1.jpg", "imgs/slide2.jpg", "imgs/slide3.jpg",
+      "imgs/slide4.jpg", "imgs/slide5.jpg", "imgs/slide6.jpg",
+      "imgs/slide7.jpg", "imgs/slide8.jpg", "imgs/slide9.jpg"
+    ];
 
-    let currentSlide = 0;
+    let currentSlide = 0;
 
+    // A função displayLyrics agora só cria o parágrafo uma vez
     function displayLyrics() {
-      lyricsContainer.innerHTML = '';
-      frases.forEach((frase, index) => {
+      // Cria o elemento <p> apenas se ele não existir
+      if (!document.getElementById('current-lyric')) {
         const p = document.createElement('p');
-        p.textContent = frase;
-        p.id = `lyric-${index}`;
+        p.id = 'current-lyric';
         lyricsContainer.appendChild(p);
-      });
-      document.getElementById('lyric-0').classList.add('highlight');
+      }
+      // Atualiza o conteúdo da frase atual
+      document.getElementById('current-lyric').textContent = frases[currentSlide];
+      document.getElementById('current-lyric').classList.add('highlight');
     }
 
+    // A função rotateContent agora atualiza a imagem e a única frase
     function rotateContent() {
       currentSlide = (currentSlide + 1) % slides.length;
       slide.src = slides[currentSlide];
-      const previousHighlight = document.querySelector('.highlight');
-      if (previousHighlight) previousHighlight.classList.remove('highlight');
-      const currentLyric = document.getElementById(`lyric-${currentSlide}`);
-      if (currentLyric) {
-        currentLyric.classList.add('highlight');
-        currentLyric.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      const currentLyricElement = document.getElementById('current-lyric');
+      if (currentLyricElement) {
+        currentLyricElement.classList.remove('highlight'); // Remove o destaque da frase anterior
+        // Pequeno delay para a animação de "sumir" antes de mudar o texto
+        setTimeout(() => {
+          currentLyricElement.textContent = frases[currentSlide];
+          currentLyricElement.classList.add('highlight'); // Adiciona destaque à nova frase
+        }, 100); // Ajuste este valor se a animação não estiver suave
       }
     }
 
-    playBtn.addEventListener('click', () => {
-      if (audio.paused) {
-        audio.play();
-        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-      } else {
-        audio.pause();
-        playBtn.innerHTML = '<i class="fas fa-play"></i>';
-      }
-    });
+    playBtn.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play();
+        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+      } else {
+        audio.pause();
+        playBtn.innerHTML = '<i class="fas fa-play"></i>';
+      }
+    });
 
-    displayLyrics();
-    setInterval(rotateContent, 3500);
+    // Chama displayLyrics no início para carregar a primeira frase
+    displayLyrics();
+    setInterval(rotateContent, 3500);
 
-    document.addEventListener('click', () => {
-      audio.play().then(() => {
-        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-      }).catch(e => console.log('Reprodução automática bloqueada:', e));
-    }, { once: true });
-  </script>
+    document.addEventListener('click', () => {
+      audio.play().then(() => {
+        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+      }).catch(e => console.log('Reprodução automática bloqueada:', e));
+    }, { once: true });
+  </script>
 </body>
 </html>
