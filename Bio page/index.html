@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Para Nós Dois 💖</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@600&family=Montserrat:wght@400&family=Roboto:wght@300&display=swap" rel="stylesheet">
   <style>
     :root {
       --spotify-green: #1DB954;
@@ -13,57 +14,57 @@
       --spotify-gray: #535353;
       --spotify-light-gray: #B3B3B3;
     }
-    
+
     body {
       margin: 0;
       font-family: 'Montserrat', sans-serif;
       background-color: var(--spotify-black);
       color: var(--spotify-white);
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
-    
+
     .spotify-container {
       display: flex;
       flex-direction: column;
-      height: 100vh;
+      min-height: 100vh;
       padding: 20px;
       background: linear-gradient(to bottom, #1E1E1E, #121212);
     }
-    
+
     .player-header {
       display: flex;
       align-items: center;
       margin-bottom: 30px;
     }
-    
+
     .player-header h1 {
       font-size: 24px;
       margin-left: 15px;
       color: var(--spotify-white);
     }
-    
+
     .player-content {
       display: flex;
       flex: 1;
       gap: 30px;
     }
-    
+
     .album-art {
       flex: 1;
       display: flex;
       justify-content: center;
       align-items: center;
     }
-    
+
     .album-art img {
       width: 80%;
       max-width: 400px;
       border-radius: 10px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     }
-    
+
     .lyrics-container {
       flex: 1;
       display: flex;
@@ -71,61 +72,62 @@
       justify-content: center;
       padding: 0 30px;
     }
-    
+
     .song-info {
       margin-bottom: 30px;
     }
-    
+
     .song-title {
       font-size: 32px;
       font-weight: bold;
       margin-bottom: 5px;
       color: var(--spotify-white);
     }
-    
+
     .song-artist {
       font-size: 18px;
       color: var(--spotify-light-gray);
     }
-    
+
     .lyrics {
       height: 300px;
       overflow-y: auto;
       padding-right: 15px;
     }
-    
+
     .lyrics p {
       font-size: 18px;
       line-height: 1.6;
       margin-bottom: 20px;
       color: var(--spotify-light-gray);
     }
-    
+
     .lyrics .highlight {
       color: var(--spotify-white);
       font-weight: bold;
+      animation: fadeHighlight 2s infinite;
     }
-    
+
     .player-controls {
       background-color: var(--spotify-gray);
       padding: 20px;
       border-radius: 10px;
       margin-top: 30px;
     }
-    
+
     .progress-container {
       display: flex;
       align-items: center;
       margin-bottom: 15px;
     }
-    
+
     .progress-time {
       font-size: 12px;
       color: var(--spotify-light-gray);
       width: 50px;
       text-align: center;
     }
-    
+
     .progress-bar {
       flex: 1;
       height: 4px;
@@ -134,21 +136,22 @@
       margin: 0 10px;
       cursor: pointer;
     }
-    
+
     .progress {
       height: 100%;
       background-color: var(--spotify-green);
       border-radius: 2px;
       width: 30%;
     }
-    
+
     .controls {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 25px;
+      flex-wrap: wrap;
     }
-    
+
     .control-btn {
       background: none;
       border: none;
@@ -156,7 +159,7 @@
       font-size: 20px;
       cursor: pointer;
     }
-    
+
     .play-btn {
       background-color: var(--spotify-white);
       color: var(--spotify-black);
@@ -168,18 +171,18 @@
       align-items: center;
       font-size: 24px;
     }
-    
+
     .volume-control {
       display: flex;
       align-items: center;
       margin-left: auto;
     }
-    
+
     .volume-icon {
       margin-right: 10px;
       color: var(--spotify-light-gray);
     }
-    
+
     .volume-bar {
       width: 100px;
       height: 4px;
@@ -187,23 +190,110 @@
       border-radius: 2px;
       cursor: pointer;
     }
-    
+
     .volume-progress {
       height: 100%;
       background-color: var(--spotify-white);
       border-radius: 2px;
       width: 70%;
     }
-    
-    /* Animação para o destaque das letras */
+
     @keyframes fadeHighlight {
       0% { opacity: 0.5; }
       50% { opacity: 1; }
       100% { opacity: 0.5; }
     }
-    
-    .highlight {
-      animation: fadeHighlight 2s infinite;
+
+    /* RESPONSIVIDADE */
+    @media (max-width: 768px) {
+      .player-content {
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .album-art img {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .lyrics-container {
+        padding: 0 10px;
+      }
+
+      .song-title {
+        font-size: 24px;
+        text-align: center;
+      }
+
+      .song-artist {
+        font-size: 16px;
+        text-align: center;
+      }
+
+      .lyrics {
+        height: auto;
+        max-height: 200px;
+        padding-right: 10px;
+      }
+
+      .player-controls {
+        margin-top: 20px;
+        padding: 15px;
+      }
+
+      .controls {
+        flex-wrap: wrap;
+        gap: 15px;
+      }
+
+      .volume-control {
+        margin-left: 0;
+        margin-top: 15px;
+        width: 100%;
+        justify-content: center;
+      }
+
+      .volume-bar {
+        width: 80%;
+      }
+
+      .progress-container {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .progress-time {
+        width: auto;
+      }
+
+      .progress-bar {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .player-header h1 {
+        font-size: 20px;
+        margin-left: 10px;
+      }
+
+      .play-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+      }
+
+      .control-btn {
+        font-size: 18px;
+      }
+
+      .volume-icon {
+        font-size: 16px;
+      }
+
+      .lyrics p {
+        font-size: 16px;
+      }
     }
   </style>
 </head>
@@ -262,13 +352,11 @@
   </audio>
 
   <script>
-    // Elementos
     const audio = document.getElementById('audio');
     const playBtn = document.getElementById('play-btn');
     const lyricsContainer = document.getElementById('lyrics');
     const slide = document.getElementById('slide');
-    
-    // Frases românticas (substitua pelas suas)
+
     const frases = [
       "O nosso amor é a melhor coisa que me aconteceu",
       "Cada momento contigo é especial",
@@ -280,16 +368,14 @@
       "Seu sorriso ilumina meus dias",
       "Encontrei em você meu porto seguro"
     ];
-    
-    // Slideshow
+
     const slides = [
       "imgs/slide1.jpg", "imgs/slide2.jpg", "imgs/slide3.jpg",
       "imgs/slide4.jpg", "imgs/slide5.jpg", "imgs/slide6.jpg",
       "imgs/slide7.jpg", "imgs/slide8.jpg", "imgs/slide9.jpg"
     ];
     let currentSlide = 0;
-    
-    // Inicializar letras
+
     function displayLyrics() {
       lyricsContainer.innerHTML = '';
       frases.forEach((frase, index) => {
@@ -298,31 +384,23 @@
         p.id = `lyric-${index}`;
         lyricsContainer.appendChild(p);
       });
-      
-      // Destacar a primeira frase
       document.getElementById('lyric-0').classList.add('highlight');
     }
-    
-    // Rotação de slides e frases
+
     function rotateContent() {
       currentSlide = (currentSlide + 1) % slides.length;
       slide.src = slides[currentSlide];
-      
-      // Remover destaque anterior
+
       const previousHighlight = document.querySelector('.highlight');
-      if (previousHighlight) {
-        previousHighlight.classList.remove('highlight');
-      }
-      
-      // Destacar nova frase
+      if (previousHighlight) previousHighlight.classList.remove('highlight');
+
       const currentLyric = document.getElementById(`lyric-${currentSlide}`);
       if (currentLyric) {
         currentLyric.classList.add('highlight');
         currentLyric.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     }
-    
-    // Controles do player
+
     playBtn.addEventListener('click', () => {
       if (audio.paused) {
         audio.play();
@@ -332,14 +410,10 @@
         playBtn.innerHTML = '<i class="fas fa-play"></i>';
       }
     });
-    
-    // Inicialização
+
     displayLyrics();
-    
-    // Iniciar slideshow (3.5 segundos por slide)
     setInterval(rotateContent, 3500);
-    
-    // Tentar reproduzir automaticamente (pode não funcionar em todos navegadores)
+
     document.addEventListener('click', () => {
       audio.play().then(() => {
         playBtn.innerHTML = '<i class="fas fa-pause"></i>';
