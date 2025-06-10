@@ -53,8 +53,10 @@ body {
 }
 
 .album-art img {
-  width: 80%;
+  width: 100%;
   max-width: 400px;
+  max-height: 80vh;
+  object-fit: contain;
   border-radius: 10px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
@@ -210,5 +212,6 @@ body {
 
   .album-art img {
     width: 90%;
+    max-height: 60vh;
   }
 }
