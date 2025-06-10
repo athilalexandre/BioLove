@@ -30,14 +30,18 @@
       </div>
     </div>
 
-          <audio id="audio" loop>
+    <div class="initial-play-button-container" id="initial-play-button-container">
+        <button class="control-btn play-btn" id="play-btn-initial"><i class="fas fa-play"></i></button>
+    </div>
+
+  <audio id="audio" loop>
     <source src="audio/always.mp3" type="audio/mpeg" />
   </audio>
 
   <script>
     const audio = document.getElementById('audio');
-    // playBtn não é mais necessário se não houver um botão de play visível
-    // const playBtn = document.getElementById('play-btn'); 
+    const playBtnInitial = document.getElementById('play-btn-initial'); // Novo botão
+    const initialPlayButtonContainer = document.getElementById('initial-play-button-container'); // Novo container
     const lyricsContainer = document.getElementById('lyrics');
     const slide = document.getElementById('slide');
 
@@ -61,69 +65,48 @@
 
     let currentSlide = 0;
 
-    // A função displayLyrics agora só cria o parágrafo uma vez
     function displayLyrics() {
-      // Cria o elemento <p> apenas se ele não existir
       if (!document.getElementById('current-lyric')) {
         const p = document.createElement('p');
         p.id = 'current-lyric';
         lyricsContainer.appendChild(p);
       }
-      // Atualiza o conteúdo da frase atual
       document.getElementById('current-lyric').textContent = frases[currentSlide];
       document.getElementById('current-lyric').classList.add('highlight');
     }
 
-    // A função rotateContent agora atualiza a imagem e a única frase
     function rotateContent() {
       currentSlide = (currentSlide + 1) % slides.length;
       slide.src = slides[currentSlide];
 
       const currentLyricElement = document.getElementById('current-lyric');
       if (currentLyricElement) {
-        currentLyricElement.classList.remove('highlight'); // Remove o destaque da frase anterior
-        // Pequeno delay para a animação de "sumir" antes de mudar o texto
+        currentLyricElement.classList.remove('highlight');
         setTimeout(() => {
           currentLyricElement.textContent = frases[currentSlide];
-          currentLyricElement.classList.add('highlight'); // Adiciona destaque à nova frase
-        }, 100); // Ajuste este valor se a animação não estiver suave
+          currentLyricElement.classList.add('highlight');
+        }, 100);
       }
     }
 
-    // REMOVENDO O EVENT LISTENER DO BOTÃO DE PLAY
-    // playBtn.addEventListener('click', () => {
-    //   if (audio.paused) {
-    //     audio.play();
-    //     playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-    //   } else {
-    //     audio.pause();
-    //     playBtn.innerHTML = '<i class="fas fa-play"></i>';
-    //   }
-    // });
-
-    // Inicia a música automaticamente ao carregar a página
-    // Adicionado um pequeno atraso e verificação para compatibilidade com autoplay
-    window.addEventListener('load', () => {
-      audio.play().then(() => {
-        // Áudio iniciado com sucesso
-      }).catch(e => {
-        // Se autoplay for bloqueado, loga o erro (comum em alguns navegadores)
-        console.log('Reprodução automática bloqueada:', e);
-        // Opcional: Aqui você pode mostrar um botão de play/pause caso o autoplay falhe.
-      });
+    // Event listener para o novo botão de Play/Pause
+    playBtnInitial.addEventListener('click', () => {
+        if (audio.paused) {
+            audio.play();
+            playBtnInitial.innerHTML = '<i class="fas fa-pause"></i>';
+            initialPlayButtonContainer.style.display = 'none'; // Esconde o botão após o play
+        } else {
+            audio.pause();
+            playBtnInitial.innerHTML = '<i class="fas fa-play"></i>';
+            initialPlayButtonContainer.style.display = 'flex'; // Mostra o botão ao pausar
+        }
     });
 
-
-    // Chama displayLyrics no início para carregar a primeira frase
     displayLyrics();
     setInterval(rotateContent, 3500);
 
-    // REMOVENDO O EVENT LISTENER DO DOCUMENTO PARA AUTOPLAY INICIAL
-    // document.addEventListener('click', () => {
-    //   audio.play().then(() => {
-    //     playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-    //   }).catch(e => console.log('Reprodução automática bloqueada:', e));
-    // }, { once: true });
+    // Remove o listener de 'load' para autoplay, pois agora temos um botão
+    // window.addEventListener('load', () => { ... });
   </script>
 </body>
 </html>
