@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@600&family=Montserrat:wght@400&family=Roboto:wght@300&display=swap');
 
 :root {
-  --spotify-green: #1DB954;
+  --spotify-green: #1DB950; /* Leve ajuste na cor para talvez um contraste melhor se necessário */
   --spotify-black: #191414;
   --spotify-white: #FFFFFF;
   --spotify-gray: #535353;
@@ -23,10 +23,13 @@ body {
 .spotify-container {
   display: flex;
   flex-direction: column;
-  max-height: 95dvh;
+  /* Ajustei um pouco a altura máxima para garantir que tudo caiba, se a barra de progresso for removida */
+  max-height: 98dvh; /* Um pouco mais alto, já que o rodapé foi removido */
   padding: 20px;
   background: linear-gradient(to bottom, #1E1E1E, #121212);
-  overflow-y: auto;
+  /* Se a barra de progresso for removida, o overflow-y talvez não seja tão necessário,
+     mas mantê-lo é seguro caso o conteúdo seja muito grande */
+  overflow-y: auto; 
   max-width: 600px;
   width: 100%;
   box-sizing: border-box;
@@ -50,7 +53,8 @@ body {
   flex-direction: column;
   flex: 1;
   gap: 20px;
-  overflow-y: auto;
+  /* Se a barra de progresso for removida, este pode se expandir mais */
+  overflow-y: auto; /* Mantido por segurança */
   min-height: 0;
 }
 
@@ -65,7 +69,8 @@ body {
 .album-art img {
   width: 90%;
   max-width: 350px;
-  max-height: 40vh;
+  /* Ajustei a altura máxima para a imagem ter mais espaço sem a barra de controles */
+  max-height: 45vh; /* Um pouco maior agora que não tem a barra de controles */
   object-fit: contain;
   border-radius: 10px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
@@ -118,6 +123,8 @@ body {
   font-weight: bold;
 }
 
+/* REMOVIDO: A seção .player-controls inteira não é mais necessária */
+/*
 .player-controls {
   background-color: var(--spotify-gray);
   padding: 20px;
@@ -150,41 +157,25 @@ body {
 }
 
 .controls {
-  /* Centraliza o único botão de play */
   display: flex;
   justify-content: center;
   align-items: center;
-  /* Não precisamos de gap agora */
-  /* gap: 15px; */
-  /* Remove flex-wrap pois é um único item */
-  /* flex-wrap: wrap; */
-}
-
-/* Estas regras não são mais necessárias, mas mantidas para fins de referência se mudar de ideia */
-.control-btn {
-  /* background: none; */
-  /* border: none; */
-  /* color: var(--spotify-white); */
-  /* font-size: 18px; */
-  /* cursor: pointer; */
-  /* padding: 8px; */
 }
 
 .play-btn {
   background-color: var(--spotify-white);
   color: var(--spotify-black);
-  /* Tamanho ideal para o único botão de play */
   width: 55px;
   height: 55px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  /* Tamanho do ícone dentro do botão de play */
   font-size: 26px;
 }
+*/
 
-/* Remove barra de volume e tempos (mantidos) */
+/* Remove barra de volume e tempos (mantidos, embora não existam mais elementos para eles) */
 .volume-control {
   display: none;
 }
@@ -225,17 +216,20 @@ body {
 
   .album-art img {
     width: 95%;
-    max-height: 35vh;
+    /* Ajustei a altura máxima para a imagem ter mais espaço em mobile */
+    max-height: 40vh; /* Um pouco maior agora que não tem a barra de controles */
   }
 
   .spotify-container {
     padding: 15px;
   }
 
-  /* Ajustes específicos para o botão de play em telas menores */
+  /* REMOVIDO: Ajustes para o botão de play em telas menores não são mais necessários */
+  /*
   .play-btn {
-    width: 50px; /* Levemente menor no mobile */
+    width: 50px;
     height: 50px;
-    font-size: 24px; /* Ícone do play menor no mobile */
+    font-size: 24px;
   }
+  */
 }
