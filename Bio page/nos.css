@@ -260,3 +260,7 @@ body {
     padding: 15px; /* Reduz o padding para mobile */
   }
 }
+
+.spotify-icon {
+  color: red;
+}
