@@ -1,313 +1,262 @@
-/* Reset Básico e ajustes de viewport mais agressivos */
-html, body {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden; /* **Essencial para remover qualquer rolagem horizontal indesejada** */
-  width: 100vw; /* Garante que HTML e Body ocupem exatamente 100% da largura da viewport */
-  height: 100dvh; /* Garante 100% da altura da viewport dinâmica */
-}
-* {
-  box-sizing: border-box; /* Crucial para garantir que padding e border sejam incluídos na largura/altura de todos os elementos */
-}
-
-@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@600&family=Montserrat:wght@400&family=Roboto:300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@600&family=Montserrat:wght@400&family=Roboto:wght@300&display=swap');
 
 :root {
-  --spotify-green: #1DB950;
+  --spotify-green: #1DB954;
   --spotify-black: #191414;
   --spotify-white: #FFFFFF;
   --spotify-gray: #535353;
   --spotify-light-gray: #B3B3B3;
-  --red-play-button: #FF0000;
 }
 
 body {
+  margin: 0;
   font-family: 'Montserrat', sans-serif;
   background-color: var(--spotify-black);
   color: var(--spotify-white);
+  /* Altura mínima da viewport.
+     Usa 100dvh para melhor compatibilidade em dispositivos móveis,
+     considerando a altura dinâmica da viewport (incluindo barras do navegador). */
   min-height: 100dvh;
   display: flex;
+  /* Centraliza o conteúdo verticalmente */
   align-items: center;
+  /* Centraliza o conteúdo horizontalmente */
   justify-content: center;
-  overflow: auto; /* Permite rolagem do corpo se o conteúdo exceder a altura da tela */
-  position: relative; /* Necessário para posicionar o botão fixo */
+  /* Garante que o conteúdo role apenas se necessário, mas o container principal permanece centralizado */
+  overflow: auto;
 }
 
 .spotify-container {
   display: flex;
   flex-direction: column;
-  max-height: 98dvh; /* Garante que o container ocupe a altura disponível na viewport */
+  /* Remove a altura fixa para permitir que o conteúdo se ajuste */
+  /* height: 100vh; */
+  /* Adiciona uma altura máxima para evitar que ele fique muito grande em telas maiores */
+  max-height: 95dvh; /* Um pouco menos de 100dvh para dar um respiro */
   padding: 20px;
   background: linear-gradient(to bottom, #1E1E1E, #121212);
-  width: calc(100% - 40px); /* 100% da largura menos 20px de padding de cada lado */
-  max-width: 600px; /* Limita a largura máxima em telas grandes */
-  border-radius: 10px;
-  overflow-y: auto; /* Permite rolagem dentro do container principal se o conteúdo for muito grande */
+  /* Adiciona um overflow para permitir rolagem dentro do container se o conteúdo for muito grande */
+  overflow-y: auto;
+  /* Largura máxima para desktops, mas flexível para mobile */
+  max-width: 600px; /* Ajuste conforme necessário */
+  width: 100%; /* Garante que ocupe toda a largura disponível no mobile */
+  box-sizing: border-box; /* Inclui padding e border na largura e altura */
+  border-radius: 10px; /* Mantém o border-radius */
 }
 
 .player-header {
   display: flex;
-  align-items: center; /* Alinha o ícone e o título verticalmente */
-  justify-content: center; /* Centraliza horizontalmente o conteúdo do cabeçalho */
+  align-items: center;
   margin-bottom: 30px;
-  text-align: center; /* Garante que qualquer texto que não seja flex item seja centralizado */
-}
-
-.spotify-icon { /* Estilo para o ícone do Spotify */
-  font-size: 36px;
-  color: var(--red-play-button); /* Cor do ícone definida para vermelho */
-  margin-right: 10px; /* Adiciona um pequeno espaço entre o ícone e o título */
 }
 
 .player-header h1 {
   font-size: 24px;
-  margin: 0; /* Remove margem padrão para melhor controle com flexbox */
+  margin-left: 15px;
   color: var(--spotify-white);
 }
 
 .player-content {
   display: flex;
-  flex-direction: column;
-  flex: 1; /* Permite que este container cresça e ocupe o espaço restante */
-  gap: 20px;
-  min-height: 0; /* Essencial para que flex: 1 funcione corretamente com overflow */
+  /* Permite que o player-content cresça e ocupe o espaço restante */
+  flex: 1;
+  gap: 30px;
+  flex-wrap: wrap;
+  /* Permite rolagem dentro do player-content se necessário */
+  overflow-y: auto;
+  /* Garante que o player-content não force o container a ser maior do que a tela */
+  min-height: 0;
 }
 
 .album-art {
-  flex-shrink: 0; /* Impede que a imagem encolha */
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  /* Permite que a imagem se encolha se necessário */
+  min-width: 0;
 }
 
 .album-art img {
-  width: 90%; /* A imagem ocupa 90% da largura do seu container */
-  max-width: 350px;
-  max-height: 45vh; /* Ajustei a altura máxima usando viewport height */
-  object-fit: contain; /* Garante que a imagem se ajuste sem cortar */
+  width: 100%;
+  max-width: 400px;
+  /* Ajusta a altura máxima para ser mais flexível,
+     permitindo que a imagem se ajuste melhor sem rolar */
+  max-height: 50vh; /* Ajuste conforme necessário */
+  object-fit: contain;
   border-radius: 10px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .lyrics-container {
-  flex: 1; /* Permite que o container de letras cresça e ocupe o espaço disponível */
+  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Centraliza verticalmente o texto dentro do seu espaço */
-  padding: 0 15px;
-  text-align: center;
+  justify-content: center;
+  padding: 0 30px;
+  /* Permite que o container de letras se encolha */
   min-width: 0;
-  min-height: 0;
-  overflow-y: auto; /* Permite rolagem dentro do container de letras se as frases excederem */
+  min-height: 0; /* Garante que o container de letras não force o pai a expandir */
 }
 
 .song-info {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .song-title {
   font-family: 'Great Vibes', cursive;
-  font-size: 32px;
+  font-size: 36px;
   color: #f48fb1;
   margin-bottom: 5px;
 }
 
 .song-artist {
-  font-size: 16px;
+  font-size: 18px;
   color: var(--spotify-light-gray);
 }
 
 .lyrics {
-  flex-grow: 1; /* Permite que a área das frases cresça */
+  /* Remove a altura fixa e usa flex-grow para ocupar o espaço disponível */
   height: auto;
-  margin: 0;
-  padding: 0;
-  padding-top: 40px; /* Aumenta o padding superior para "pular" um parágrafo e dar espaço */
-  padding-bottom: 40px; /* Adiciona espaço na parte inferior para rolagem */
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-right: 15px;
+  /* Garante que o scrollbar apareça apenas quando necessário */
+  -webkit-overflow-scrolling: touch; /* Melhora o scroll em iOS */
 }
 
 .lyrics p {
   font-size: 18px;
   line-height: 1.6;
-  margin-bottom: 10px; /* Adiciona margem entre as frases para melhor leitura */
+  margin-bottom: 20px;
   color: var(--spotify-light-gray);
-  display: block; /* Volta a exibir todas as frases */
-  transition: color 0.3s ease-in-out, font-weight 0.3s ease-in-out, transform 0.3s ease-in-out; /* Adiciona transição para o highlight */
 }
 
 .lyrics .highlight {
   color: var(--spotify-white);
   font-weight: bold;
-  animation: none; /* Remove a animação de fade contínua quando todas as frases são visíveis */
-  transform: scale(1.05); /* Pequeno zoom na frase destacada */
 }
 
-/* Esconde o container do botão de play inicial/autoplay que não é mais usado */
-.initial-play-button-container {
-    display: none;
+.player-controls {
+  background-color: var(--spotify-gray);
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 30px;
+  /* Garante que os controles não ocupem mais espaço do que o necessário */
+  flex-shrink: 0;
 }
 
-/* Novo botão de play/pause fixo no canto */
-.fixed-play-button-container {
-  position: fixed;
-  bottom: 20px; /* Espaçamento do rodapé */
-  right: 20px; /* Espaçamento da lateral direita */
-  z-index: 1000; /* Garante que o botão fique acima de todo o conteúdo */
+.progress-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  justify-content: center;
 }
 
-.play-btn-fixed {
-  background-color: var(--red-play-button);
+.progress-bar {
+  flex: 1;
+  height: 4px;
+  background-color: #535353;
+  border-radius: 2px;
+  cursor: pointer;
+  max-width: 100%;
+}
+
+.progress {
+  height: 100%;
+  background-color: var(--spotify-green);
+  border-radius: 2px;
+  width: 30%;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  flex-wrap: wrap;
+}
+
+.control-btn {
+  background: none;
+  border: none;
   color: var(--spotify-white);
-  width: 60px; /* Tamanho do botão fixo */
-  height: 60px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.play-btn {
+  background-color: var(--spotify-white);
+  color: var(--spotify-black);
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 28px; /* Tamanho do ícone no botão fixo */
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  transition: transform 0.2s ease-in-out;
+  font-size: 24px;
 }
 
-.play-btn-fixed:active {
-  transform: scale(0.95);
-}
-
-/* Remove barra de volume e tempos (não utilizados) */
-.volume-control, .progress-time {
+/* Remove barra de volume */
+.volume-control {
   display: none;
 }
 
-/* Animação de destaque (se quiser uma animação de pulso para o highlight) */
-@keyframes highlightPulse {
-  0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.05); opacity: 1; }
-  100% { transform: scale(1); opacity: 1; }
+/* Remove os tempos */
+.progress-time {
+  display: none;
 }
 
-/* RESPONSIVO (Ajustes para mobile) */
+/* Animação para o destaque das letras */
+@keyframes fadeHighlight {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+
+.highlight {
+  animation: fadeHighlight 2s infinite;
+}
+
+/* RESPONSIVO */
 @media (max-width: 768px) {
-  .spotify-container {
-    padding: 15px; /* Reduz o padding para telas menores */
-    width: 95%; /* Aumentado para 95% para consumir mais espaço e centralizar melhor */
-    margin: 0 auto; /* Centraliza horizontalmente */
-  }
-
-  .player-header {
-    margin-bottom: 20px; /* Um pouco menos margem em mobile */
-  }
-
-  .player-header h1 {
-    font-size: 20px;
-  }
-  
-  .spotify-icon { /* Ajuste do ícone para mobile */
-    font-size: 30px;
-    margin-right: 8px;
-  }
-
   .player-content {
-    gap: 15px; /* Menor gap em mobile */
-  }
-
-  .album-art img {
-    width: 95%; /* Ocupa mais largura em mobile */
-    max-height: 38vh; /* Ajusta a altura máxima da imagem em mobile */
+    flex-direction: column;
+    gap: 20px;
   }
 
   .lyrics-container {
-    padding: 0 10px;
+    padding: 0;
   }
 
   .song-title {
-    font-size: 26px;
+    font-size: 28px;
+    text-align: center;
   }
 
   .song-artist {
-    font-size: 14px;
+    text-align: center;
   }
 
   .lyrics {
-    padding-top: 25px; /* Ajusta o padding para mobile */
-    padding-bottom: 25px;
+    /* Ajusta a altura máxima para que as letras não ocupem todo o espaço
+       e dêem visibilidade à imagem e controles */
+    max-height: 150px; /* Reduzido para dar mais espaço à imagem e controles */
+    /* Garante que as letras rolagem se houver muito conteúdo */
+    overflow-y: auto;
   }
 
-  .lyrics p {
-    font-size: 16px; /* Tamanho de fonte menor para as frases em mobile */
-    margin-bottom: 8px;
+  .controls {
+    gap: 15px;
   }
 
-  .fixed-play-button-container {
-    bottom: 15px;
-    right: 15px;
+  .album-art img {
+    width: 90%;
+    /* Ajusta a altura máxima para ser mais flexível em telas menores */
+    max-height: 40vh; /* Ajuste conforme necessário */
   }
 
-  .play-btn-fixed {
-    width: 50px; /* Tamanho do botão fixo em mobile */
-    height: 50px;
-    font-size: 24px; /* Tamanho do ícone em mobile */
-  }
-}
-
-/* Ajustes adicionais para telas com pouca altura (ex: alguns celulares em modo paisagem) */
-@media (max-height: 700px) {
   .spotify-container {
-    max-height: 98vh; /* Garante que o container ocupe a altura disponível */
-    padding: 10px;
-    width: 98%; /* Ainda mais largo para telas muito baixas, quase 100% */
-    margin: 0 auto; /* Centraliza */
-  }
-
-  .player-header {
-    margin-bottom: 15px;
-  }
-
-  .player-header h1 {
-    font-size: 18px;
-  }
-
-  .spotify-icon { /* Ajuste do ícone para telas baixas */
-    font-size: 26px;
-    margin-right: 5px;
-  }
-
-  .album-art img {
-    max-height: 30vh; /* Reduz a altura da imagem para dar mais espaço às letras */
-  }
-
-  .lyrics-container {
-    padding: 0 5px;
-  }
-
-  .song-title {
-    font-size: 22px;
-  }
-
-  .song-artist {
-    font-size: 12px;
-  }
-
-  .lyrics {
-    padding-top: 15px; /* Reduz o padding superior em telas muito baixas */
-    padding-bottom: 15px;
-  }
-
-  .lyrics p {
-    font-size: 14px;
-    margin-bottom: 6px;
-  }
-
-  .fixed-play-button-container {
-    bottom: 10px;
-    right: 10px;
-  }
-
-  .play-btn-fixed {
-    width: 45px;
-    height: 45px;
-    font-size: 22px;
+    padding: 15px; /* Reduz o padding para mobile */
   }
 }
