@@ -1,3 +1,13 @@
+/* Reset Básico para garantir consistência */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Previne rolagem horizontal indesejada que pode causar "espaço à esquerda" */
+}
+* {
+  box-sizing: border-box; /* Garante que padding e border sejam incluídos na largura/altura */
+}
+
 @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@600&family=Montserrat:wght@400&family=Roboto:300&display=swap');
 
 :root {
@@ -10,7 +20,6 @@
 }
 
 body {
-  margin: 0;
   font-family: 'Montserrat', sans-serif;
   background-color: var(--spotify-black);
   color: var(--spotify-white);
@@ -28,23 +37,29 @@ body {
   max-height: 98dvh; /* Garante que o container ocupe a altura disponível na viewport */
   padding: 20px;
   background: linear-gradient(to bottom, #1E1E1E, #121212);
-  /* Use uma largura fixa para o mobile e centralize com margin: auto */
   width: calc(100% - 40px); /* 100% da largura menos 20px de padding de cada lado */
   max-width: 600px; /* Limita a largura máxima em telas grandes */
-  box-sizing: border-box; /* Inclui padding e border na largura/altura */
   border-radius: 10px;
   overflow-y: auto; /* Permite rolagem dentro do container principal se o conteúdo for muito grande */
 }
 
 .player-header {
   display: flex;
-  align-items: center;
+  align-items: center; /* Alinha o ícone e o título verticalmente */
+  justify-content: center; /* Centraliza horizontalmente o conteúdo do cabeçalho */
   margin-bottom: 30px;
+  text-align: center; /* Garante que qualquer texto que não seja flex item seja centralizado */
+}
+
+.spotify-icon { /* Estilo para o ícone do Spotify */
+  font-size: 36px;
+  color: var(--red-play-button); /* Cor do ícone definida para vermelho */
+  margin-right: 10px; /* Adiciona um pequeno espaço entre o ícone e o título */
 }
 
 .player-header h1 {
   font-size: 24px;
-  margin-left: 15px;
+  margin: 0; /* Remove margem padrão para melhor controle com flexbox */
   color: var(--spotify-white);
 }
 
@@ -106,8 +121,8 @@ body {
   height: auto;
   margin: 0;
   padding: 0;
-  padding-top: 20px; /* Adiciona um espaço no topo das frases, pulando o parágrafo */
-  padding-bottom: 20px; /* Adiciona espaço na parte inferior para rolagem */
+  padding-top: 40px; /* Aumenta o padding superior para "pular" um parágrafo e dar espaço */
+  padding-bottom: 40px; /* Adiciona espaço na parte inferior para rolagem */
 }
 
 .lyrics p {
@@ -175,8 +190,7 @@ body {
 @media (max-width: 768px) {
   .spotify-container {
     padding: 15px; /* Reduz o padding para telas menores */
-    /* Ajustado para usar 90% da largura e centralizar com margin auto */
-    width: 90%;
+    width: 90%; /* Usa 90% da largura e centraliza com margin auto */
     margin: 0 auto; /* Centraliza horizontalmente */
   }
 
@@ -186,6 +200,11 @@ body {
 
   .player-header h1 {
     font-size: 20px;
+  }
+  
+  .spotify-icon { /* Ajuste do ícone para mobile */
+    font-size: 30px;
+    margin-right: 8px;
   }
 
   .player-content {
@@ -210,8 +229,8 @@ body {
   }
 
   .lyrics {
-    padding-top: 15px; /* Ajusta o padding para mobile */
-    padding-bottom: 15px;
+    padding-top: 25px; /* Ajusta o padding para mobile */
+    padding-bottom: 25px;
   }
 
   .lyrics p {
@@ -248,6 +267,11 @@ body {
     font-size: 18px;
   }
 
+  .spotify-icon { /* Ajuste do ícone para telas baixas */
+    font-size: 26px;
+    margin-right: 5px;
+  }
+
   .album-art img {
     max-height: 30vh; /* Reduz a altura da imagem para dar mais espaço às letras */
   }
@@ -265,8 +289,8 @@ body {
   }
 
   .lyrics {
-    padding-top: 10px; /* Reduz o padding superior em telas muito baixas */
-    padding-bottom: 10px;
+    padding-top: 15px; /* Reduz o padding superior em telas muito baixas */
+    padding-bottom: 15px;
   }
 
   .lyrics p {
