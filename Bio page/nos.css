@@ -13,35 +13,24 @@ body {
   font-family: 'Montserrat', sans-serif;
   background-color: var(--spotify-black);
   color: var(--spotify-white);
-  /* Altura mínima da viewport.
-     Usa 100dvh para melhor compatibilidade em dispositivos móveis,
-     considerando a altura dinâmica da viewport (incluindo barras do navegador). */
   min-height: 100dvh;
   display: flex;
-  /* Centraliza o conteúdo verticalmente */
   align-items: center;
-  /* Centraliza o conteúdo horizontalmente */
   justify-content: center;
-  /* Garante que o conteúdo role apenas se necessário, mas o container principal permanece centralizado */
   overflow: auto;
 }
 
 .spotify-container {
   display: flex;
   flex-direction: column;
-  /* Remove a altura fixa para permitir que o conteúdo se ajuste */
-  /* height: 100vh; */
-  /* Adiciona uma altura máxima para evitar que ele fique muito grande em telas maiores */
-  max-height: 95dvh; /* Um pouco menos de 100dvh para dar um respiro */
+  max-height: 95dvh;
   padding: 20px;
   background: linear-gradient(to bottom, #1E1E1E, #121212);
-  /* Adiciona um overflow para permitir rolagem dentro do container se o conteúdo for muito grande */
   overflow-y: auto;
-  /* Largura máxima para desktops, mas flexível para mobile */
-  max-width: 600px; /* Ajuste conforme necessário */
-  width: 100%; /* Garante que ocupe toda a largura disponível no mobile */
-  box-sizing: border-box; /* Inclui padding e border na largura e altura */
-  border-radius: 10px; /* Mantém o border-radius */
+  max-width: 600px;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 10px;
 }
 
 .player-header {
@@ -58,81 +47,79 @@ body {
 
 .player-content {
   display: flex;
-  /* Permite que o player-content cresça e ocupe o espaço restante */
+  /* Muda para coluna para empilhar imagem e letras */
+  flex-direction: column;
   flex: 1;
-  gap: 30px;
-  flex-wrap: wrap;
-  /* Permite rolagem dentro do player-content se necessário */
+  gap: 20px; /* Reduzi o gap para mobile */
+  /* Remove flex-wrap pois agora é coluna */
+  /* flex-wrap: wrap; */
   overflow-y: auto;
-  /* Garante que o player-content não force o container a ser maior do que a tela */
   min-height: 0;
 }
 
 .album-art {
-  flex: 1;
+  flex-shrink: 0; /* Impede que a imagem encolha além do necessário */
   display: flex;
   justify-content: center;
   align-items: center;
-  /* Permite que a imagem se encolha se necessário */
-  min-width: 0;
+  width: 100%; /* Garante que o container da imagem ocupe a largura total */
 }
 
 .album-art img {
-  width: 100%;
-  max-width: 400px;
-  /* Ajusta a altura máxima para ser mais flexível,
-     permitindo que a imagem se ajuste melhor sem rolar */
-  max-height: 50vh; /* Ajuste conforme necessário */
+  width: 90%; /* Porcentagem para a imagem se ajustar */
+  max-width: 350px; /* Um max-width um pouco menor para a imagem */
+  max-height: 40vh; /* Altura máxima para caber na tela mobile */
   object-fit: contain;
   border-radius: 10px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .lyrics-container {
-  flex: 1;
+  flex: 1; /* Permite que o container de letras cresça */
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0 30px;
-  /* Permite que o container de letras se encolha */
+  padding: 0 15px; /* Reduzi o padding para mobile */
+  text-align: center; /* Centraliza o texto das letras */
   min-width: 0;
-  min-height: 0; /* Garante que o container de letras não force o pai a expandir */
+  min-height: 0;
 }
 
 .song-info {
-  margin-bottom: 30px;
+  margin-bottom: 20px; /* Reduzi a margem */
 }
 
 .song-title {
   font-family: 'Great Vibes', cursive;
-  font-size: 36px;
+  font-size: 32px; /* Ajustei o tamanho da fonte */
   color: #f48fb1;
   margin-bottom: 5px;
 }
 
 .song-artist {
-  font-size: 18px;
+  font-size: 16px; /* Ajustei o tamanho da fonte */
   color: var(--spotify-light-gray);
 }
 
 .lyrics {
-  /* Remove a altura fixa e usa flex-grow para ocupar o espaço disponível */
-  height: auto;
   flex-grow: 1;
-  overflow-y: auto;
-  padding-right: 15px;
-  /* Garante que o scrollbar apareça apenas quando necessário */
-  -webkit-overflow-scrolling: touch; /* Melhora o scroll em iOS */
+  /* Removendo overflow-y e padding-right aqui
+     pois só exibiremos uma frase por vez.
+     Se no futuro precisar de mais, pode adicionar. */
+  overflow: hidden; /* Garante que apenas a frase atual seja visível */
+  height: auto;
 }
 
 .lyrics p {
   font-size: 18px;
   line-height: 1.6;
-  margin-bottom: 20px;
+  margin-bottom: 0; /* Removendo margem inferior, já que é uma frase por vez */
   color: var(--spotify-light-gray);
+  display: none; /* Esconde todas as frases por padrão */
 }
 
 .lyrics .highlight {
+  display: block; /* Mostra apenas a frase com a classe highlight */
   color: var(--spotify-white);
   font-weight: bold;
 }
@@ -142,7 +129,6 @@ body {
   padding: 20px;
   border-radius: 10px;
   margin-top: 30px;
-  /* Garante que os controles não ocupem mais espaço do que o necessário */
   flex-shrink: 0;
 }
 
@@ -197,17 +183,16 @@ body {
   font-size: 24px;
 }
 
-/* Remove barra de volume */
+/* Remove barra de volume e tempos (mantidos) */
 .volume-control {
   display: none;
 }
 
-/* Remove os tempos */
 .progress-time {
   display: none;
 }
 
-/* Animação para o destaque das letras */
+/* Animação para o destaque das letras (mantida) */
 @keyframes fadeHighlight {
   0% { opacity: 0.5; }
   50% { opacity: 1; }
@@ -218,45 +203,37 @@ body {
   animation: fadeHighlight 2s infinite;
 }
 
-/* RESPONSIVO */
+/* RESPONSIVO (Ajustes para mobile) */
 @media (max-width: 768px) {
   .player-content {
-    flex-direction: column;
-    gap: 20px;
+    flex-direction: column; /* Garante que continua em coluna em mobile */
+    gap: 15px; /* Ajuste para espaçamento em mobile */
   }
 
   .lyrics-container {
-    padding: 0;
+    padding: 0 10px; /* Reduz ainda mais o padding em telas muito pequenas */
   }
 
   .song-title {
-    font-size: 28px;
-    text-align: center;
+    font-size: 26px;
   }
 
   .song-artist {
-    text-align: center;
+    font-size: 14px;
   }
 
   .lyrics {
-    /* Ajusta a altura máxima para que as letras não ocupem todo o espaço
-       e dêem visibilidade à imagem e controles */
-    max-height: 150px; /* Reduzido para dar mais espaço à imagem e controles */
-    /* Garante que as letras rolagem se houver muito conteúdo */
-    overflow-y: auto;
-  }
-
-  .controls {
-    gap: 15px;
+    /* Não precisamos de max-height aqui pois a frase é única e a animação cuida do scroll */
+    /* max-height: 150px; */
+    /* overflow-y: auto; */
   }
 
   .album-art img {
-    width: 90%;
-    /* Ajusta a altura máxima para ser mais flexível em telas menores */
-    max-height: 40vh; /* Ajuste conforme necessário */
+    width: 95%; /* Ocupa quase toda a largura para a imagem ser maior */
+    max-height: 35vh; /* Ajusta a altura máxima da imagem em mobile */
   }
 
   .spotify-container {
-    padding: 15px; /* Reduz o padding para mobile */
+    padding: 15px;
   }
 }
