@@ -6,7 +6,7 @@
   --spotify-white: #FFFFFF;
   --spotify-gray: #535353;
   --spotify-light-gray: #B3B3B3;
-  --red-play-button: #FF0000; /* Nova variável para a cor vermelha */
+  --red-play-button: #FF0000;
 }
 
 body {
@@ -18,21 +18,22 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: auto;
-  position: relative; /* Adicionado para posicionar o botão de play */
+  overflow: auto; /* Permite rolagem do corpo se o conteúdo exceder a altura da tela */
+  position: relative; /* Necessário para posicionar o botão fixo */
 }
 
 .spotify-container {
   display: flex;
   flex-direction: column;
-  max-height: 98dvh;
+  max-height: 98dvh; /* Garante que o container ocupe a altura disponível na viewport */
   padding: 20px;
   background: linear-gradient(to bottom, #1E1E1E, #121212);
-  overflow-y: auto;
-  max-width: 600px;
-  width: 100%;
-  box-sizing: border-box;
+  /* Ajusta a largura para ter um respiro nas laterais, especialmente em telas menores */
+  width: calc(100% - 40px); /* 100% da largura menos 20px de padding de cada lado */
+  max-width: 600px; /* Limita a largura máxima em telas grandes */
+  box-sizing: border-box; /* Inclui padding e border na largura/altura */
   border-radius: 10px;
+  overflow-y: auto; /* Permite rolagem dentro do container principal se o conteúdo for muito grande */
 }
 
 .player-header {
@@ -50,14 +51,13 @@ body {
 .player-content {
   display: flex;
   flex-direction: column;
-  flex: 1;
+  flex: 1; /* Permite que este container cresça e ocupe o espaço restante */
   gap: 20px;
-  overflow-y: auto;
-  min-height: 0;
+  min-height: 0; /* Essencial para que flex: 1 funcione corretamente com overflow */
 }
 
 .album-art {
-  flex-shrink: 0;
+  flex-shrink: 0; /* Impede que a imagem encolha */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -65,23 +65,24 @@ body {
 }
 
 .album-art img {
-  width: 90%;
+  width: 90%; /* A imagem ocupa 90% da largura do seu container */
   max-width: 350px;
-  max-height: 45vh;
-  object-fit: contain;
+  max-height: 45vh; /* Ajustei a altura máxima usando viewport height */
+  object-fit: contain; /* Garante que a imagem se ajuste sem cortar */
   border-radius: 10px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .lyrics-container {
-  flex: 1;
+  flex: 1; /* Permite que o container de letras cresça e ocupe o espaço disponível */
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: center; /* Centraliza verticalmente o texto dentro do seu espaço */
   padding: 0 15px;
   text-align: center;
   min-width: 0;
   min-height: 0;
+  overflow-y: auto; /* Permite rolagem dentro do container de letras se as frases excederem */
 }
 
 .song-info {
@@ -101,86 +102,95 @@ body {
 }
 
 .lyrics {
-  flex-grow: 1;
-  overflow: hidden;
+  flex-grow: 1; /* Permite que a área das frases cresça */
   height: auto;
+  margin: 0;
+  padding: 0;
 }
 
 .lyrics p {
   font-size: 18px;
   line-height: 1.6;
-  margin-bottom: 0;
+  margin-bottom: 10px; /* Adiciona margem entre as frases para melhor leitura */
   color: var(--spotify-light-gray);
-  display: none;
+  display: block; /* Volta a exibir todas as frases */
+  transition: color 0.3s ease-in-out, font-weight 0.3s ease-in-out, transform 0.3s ease-in-out; /* Adiciona transição para o highlight */
 }
 
 .lyrics .highlight {
-  display: block;
   color: var(--spotify-white);
   font-weight: bold;
+  animation: none; /* Remove a animação de fade contínua quando todas as frases são visíveis */
+  transform: scale(1.05); /* Pequeno zoom na frase destacada */
 }
 
-/* Novo container para o botão de play inicial */
+/* Esconde o container do botão de play inicial/autoplay que não é mais usado */
 .initial-play-button-container {
-  position: absolute; /* Posiciona o botão de forma absoluta em relação ao body */
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7); /* Fundo semi-transparente */
-  display: flex; /* Para centralizar o botão */
-  justify-content: center;
-  align-items: center;
+    display: none;
+}
+
+/* Novo botão de play/pause fixo no canto */
+.fixed-play-button-container {
+  position: fixed;
+  bottom: 20px; /* Espaçamento do rodapé */
+  right: 20px; /* Espaçamento da lateral direita */
   z-index: 1000; /* Garante que o botão fique acima de todo o conteúdo */
 }
 
-/* Estilos para o botão de play inicial */
-.initial-play-button-container .play-btn {
-  background-color: var(--red-play-button); /* Cor vermelha */
-  color: var(--spotify-white); /* Cor do ícone */
-  width: 70px; /* Tamanho maior para o botão principal */
-  height: 70px;
+.play-btn-fixed {
+  background-color: var(--red-play-button);
+  color: var(--spotify-white);
+  width: 60px; /* Tamanho do botão fixo */
+  height: 60px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 36px; /* Tamanho do ícone */
+  font-size: 28px; /* Tamanho do ícone no botão fixo */
   border: none;
   cursor: pointer;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Sombra para destaque */
-  transition: transform 0.2s ease-in-out; /* Efeito ao clicar */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease-in-out;
 }
 
-.initial-play-button-container .play-btn:active {
-    transform: scale(0.95); /* Pequeno encolhimento ao clicar */
+.play-btn-fixed:active {
+  transform: scale(0.95);
 }
 
-
-/* Remove barra de volume e tempos (mantidos, embora não existam mais elementos para eles) */
-.volume-control {
+/* Remove barra de volume e tempos (não utilizados) */
+.volume-control, .progress-time {
   display: none;
 }
 
-.progress-time {
-  display: none;
-}
-
-/* Animação para o destaque das letras (mantida) */
-@keyframes fadeHighlight {
-  0% { opacity: 0.5; }
-  50% { opacity: 1; }
-  100% { opacity: 0.5; }
-}
-
-.highlight {
-  animation: fadeHighlight 2s infinite;
+/* Animação de destaque (se quiser uma animação de pulso para o highlight) */
+@keyframes highlightPulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
 }
 
 /* RESPONSIVO (Ajustes para mobile) */
 @media (max-width: 768px) {
+  .spotify-container {
+    padding: 15px; /* Reduz o padding para telas menores */
+    width: calc(100% - 30px); /* Ajusta a largura para mobile com padding */
+  }
+
+  .player-header {
+    margin-bottom: 20px; /* Um pouco menos margem em mobile */
+  }
+
+  .player-header h1 {
+    font-size: 20px;
+  }
+
   .player-content {
-    flex-direction: column;
-    gap: 15px;
+    gap: 15px; /* Menor gap em mobile */
+  }
+
+  .album-art img {
+    width: 95%; /* Ocupa mais largura em mobile */
+    max-height: 38vh; /* Ajusta a altura máxima da imagem em mobile */
   }
 
   .lyrics-container {
@@ -195,19 +205,68 @@ body {
     font-size: 14px;
   }
 
-  .album-art img {
-    width: 95%;
-    max-height: 40vh;
+  .lyrics p {
+    font-size: 16px; /* Tamanho de fonte menor para as frases em mobile */
+    margin-bottom: 8px;
   }
 
+  .fixed-play-button-container {
+    bottom: 15px;
+    right: 15px;
+  }
+
+  .play-btn-fixed {
+    width: 50px; /* Tamanho do botão fixo em mobile */
+    height: 50px;
+    font-size: 24px; /* Tamanho do ícone em mobile */
+  }
+}
+
+/* Ajustes adicionais para telas com pouca altura (ex: alguns celulares em modo paisagem) */
+@media (max-height: 700px) {
   .spotify-container {
-    padding: 15px;
+    max-height: 98vh; /* Garante que o container ocupe a altura disponível */
+    padding: 10px;
+    width: calc(100% - 20px);
   }
 
-  /* Ajustes para o botão de play inicial em telas menores */
-  .initial-play-button-container .play-btn {
-    width: 60px; /* Levemente menor no mobile */
-    height: 60px;
-    font-size: 30px; /* Ícone do play menor no mobile */
+  .player-header {
+    margin-bottom: 15px;
+  }
+
+  .player-header h1 {
+    font-size: 18px;
+  }
+
+  .album-art img {
+    max-height: 30vh; /* Reduz a altura da imagem para dar mais espaço às letras */
+  }
+
+  .lyrics-container {
+    padding: 0 5px;
+  }
+
+  .song-title {
+    font-size: 22px;
+  }
+
+  .song-artist {
+    font-size: 12px;
+  }
+
+  .lyrics p {
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  .fixed-play-button-container {
+    bottom: 10px;
+    right: 10px;
+  }
+
+  .play-btn-fixed {
+    width: 45px;
+    height: 45px;
+    font-size: 22px;
   }
 }
