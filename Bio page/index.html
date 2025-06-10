@@ -1,117 +1,427 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Para Nós Dois 💖</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="nos.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Para Nós Dois 💖</title>
+  <!-- Importa a biblioteca Font Awesome para ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Estilos CSS Base */
+    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@600&family=Montserrat:wght@400&family=Roboto:wght@300&display=swap');
+
+    /* Variáveis CSS para cores do Spotify */
+    :root {
+        --spotify-green: #1DB954;
+        --spotify-black: #191414;
+        --spotify-white: #FFFFFF;
+        --spotify-gray: #535353;
+        --spotify-light-gray: #B3B3B3;
+    }
+
+    /* Estilos globais do corpo da página */
+    body {
+        margin: 0;
+        font-family: 'Montserrat', sans-serif;
+        background-color: var(--spotify-black);
+        color: var(--spotify-white);
+        height: 100vh; /* Garante que o body ocupe a altura total da viewport */
+        display: flex;
+        flex-direction: column;
+        overflow: hidden; /* Evita barras de rolagem indesejadas no corpo */
+    }
+
+    /* Contêiner principal, simula a interface do Spotify */
+    .spotify-container {
+        display: flex;
+        flex-direction: column;
+        height: 100vh; /* Garante que o container ocupe a altura total */
+        padding: 20px;
+        background: linear-gradient(to bottom, #1E1E1E, #121212);
+        box-sizing: border-box; /* Inclui padding na altura total */
+    }
+
+    /* Cabeçalho do player */
+    .player-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .player-header .spotify-icon {
+        font-size: 30px;
+        color: var(--spotify-green);
+    }
+
+    .player-header h1 {
+        font-size: 24px;
+        margin-left: 15px;
+        color: var(--spotify-white);
+    }
+
+    /* Conteúdo principal do player: arte do álbum e letras */
+    .player-content {
+        display: flex;
+        flex: 1; /* Permite que o conteúdo cresça e ocupe o espaço disponível */
+        gap: 30px; /* Espaço entre a arte do álbum e as letras */
+        flex-wrap: wrap; /* Permite que os itens quebrem a linha em telas menores */
+        justify-content: center; /* Centraliza itens horizontalmente */
+        align-items: center; /* Centraliza itens verticalmente */
+        overflow: hidden; /* Esconde conteúdo que exceda as dimensões do container */
+    }
+
+    /* Seção da arte do álbum */
+    .album-art {
+        flex: 1; /* Permite que a arte do álbum cresça */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-width: 280px; /* Largura mínima para mobile */
+        max-width: 450px; /* Largura máxima para desktop */
+        box-sizing: border-box; /* Inclui padding e border na largura */
+    }
+
+    .album-art img {
+        width: 100%; /* A imagem ocupa 100% da largura de seu container */
+        max-width: 400px; /* Largura máxima da imagem */
+        max-height: 70vh; /* Ajusta altura da imagem à 70% da viewport height */
+        object-fit: contain; /* Garante que a imagem se ajuste sem cortar */
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Sombra para profundidade */
+    }
+
+    /* Contêiner das letras da música */
+    .lyrics-container {
+        flex: 1; /* Permite que o container de letras cresça */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 30px;
+        min-width: 280px; /* Largura mínima para mobile */
+        box-sizing: border-box;
+    }
+
+    /* Informações da música (título e artista) */
+    .song-info {
+        margin-bottom: 30px;
+    }
+
+    .song-title {
+        font-family: 'Great Vibes', cursive;
+        font-size: 36px;
+        color: #f48fb1;
+        margin-bottom: 5px;
+        text-align: center; /* Centraliza o título */
+    }
+
+    .song-artist {
+        font-size: 18px;
+        color: var(--spotify-light-gray);
+        text-align: center; /* Centraliza o artista */
+    }
+
+    /* Área das letras */
+    .lyrics {
+        height: 300px; /* Altura fixa para as letras */
+        overflow-y: auto; /* Permite rolagem se as letras forem muito longas */
+        padding-right: 15px; /* Padding para a barra de rolagem */
+        text-align: center; /* Centraliza o texto das letras */
+    }
+
+    .lyrics p {
+        font-size: 18px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        color: var(--spotify-light-gray);
+    }
+
+    /* Estilo para destacar as letras (animação definida abaixo) */
+    .lyrics .highlight {
+        color: var(--spotify-white);
+        font-weight: bold;
+        transition: color 0.3s ease-in-out; /* Transição suave para o destaque */
+    }
+
+    /* Botão de play/pause fixo no canto inferior direito */
+    .fixed-play-button-container {
+        position: fixed; /* Fixa o botão na tela */
+        bottom: 20px;
+        right: 20px;
+        z-index: 99; /* Garante que esteja acima de outros elementos */
+    }
+
+    .play-btn-fixed {
+        background-color: var(--spotify-green); /* Cor verde do Spotify */
+        color: var(--spotify-white);
+        width: 60px; /* Largura fixa do botão */
+        height: 60px; /* Altura fixa do botão */
+        border-radius: 50%; /* Torna o botão circular */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 28px; /* Tamanho do ícone */
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra para o botão */
+        transition: transform 0.2s ease-in-out; /* Transição suave ao passar o mouse */
+    }
+
+    .play-btn-fixed:hover {
+        transform: scale(1.05); /* Efeito de escala ao passar o mouse */
+    }
+
+    /* Animação para o destaque das letras */
+    @keyframes fadeHighlight {
+        0% { opacity: 0.7; }
+        50% { opacity: 1; }
+        100% { opacity: 0.7; }
+    }
+
+    .highlight {
+        animation: fadeHighlight 2s infinite alternate; /* Animação de fade in/out */
+    }
+
+    /* Design responsivo para telas menores (até 768px de largura) */
+    @media (max-width: 768px) {
+        .spotify-container {
+            padding: 15px; /* Ajusta o padding para telas menores */
+        }
+
+        .player-header {
+            margin-bottom: 20px;
+        }
+
+        .player-header h1 {
+            font-size: 20px; /* Reduz o tamanho do título */
+        }
+
+        .player-header .spotify-icon {
+            font-size: 25px; /* Reduz o tamanho do ícone */
+        }
+
+        .player-content {
+            flex-direction: column; /* Organiza conteúdo em coluna para empilhar */
+            gap: 20px;
+        }
+
+        .album-art {
+            flex: none; /* Remove a flexibilidade */
+            width: 100%; /* Garante que a imagem ocupe a largura total */
+            max-width: unset; /* Remove a largura máxima */
+            margin-bottom: 20px; /* Adiciona espaço abaixo da imagem */
+        }
+
+        .album-art img {
+            max-width: 80%; /* Ajusta a largura da imagem dentro do container */
+            max-height: 40vh; /* Ajusta a altura da imagem para não ser muito grande */
+        }
+
+        .lyrics-container {
+            flex: none; /* Remove a flexibilidade */
+            width: 100%; /* Garante que o container de letras ocupe a largura total */
+            padding: 0 10px; /* Ajusta o padding lateral */
+            min-width: unset; /* Remove largura mínima */
+            height: auto; /* Altura flexível para as letras */
+        }
+
+        .song-info {
+            margin-bottom: 20px;
+        }
+
+        .song-title {
+            font-size: 28px; /* Reduz o tamanho da fonte do título */
+        }
+
+        .song-artist {
+            font-size: 16px; /* Reduz o tamanho da fonte do artista */
+        }
+
+        .lyrics {
+            max-height: 180px; /* Reduz a altura máxima das letras */
+            font-size: 16px; /* Reduz o tamanho da fonte das letras */
+            padding-right: 5px; /* Ajusta padding para rolagem */
+        }
+
+        .lyrics p {
+            margin-bottom: 15px; /* Reduz o espaçamento entre parágrafos */
+        }
+
+        .play-btn-fixed {
+            width: 50px; /* Reduz o tamanho do botão fixo */
+            height: 50px;
+            font-size: 24px;
+            bottom: 15px; /* Ajusta posição para mobile */
+            right: 15px; /* Ajusta posição para mobile */
+        }
+    }
+
+    /* Design responsivo para telas ainda menores (ex: mobile em landscape ou dispositivos muito pequenos) */
+    @media (max-width: 480px) {
+        .spotify-container {
+            padding: 10px;
+        }
+
+        .player-header h1 {
+            font-size: 18px;
+        }
+
+        .player-content {
+            gap: 15px;
+        }
+
+        .album-art img {
+            max-height: 35vh; /* Ajusta ainda mais para telas muito pequenas */
+        }
+
+        .lyrics {
+            max-height: 150px;
+            font-size: 14px;
+        }
+
+        .song-title {
+            font-size: 24px;
+        }
+
+        .song-artist {
+            font-size: 14px;
+        }
+
+        .play-btn-fixed {
+            width: 45px;
+            height: 45px;
+            font-size: 20px;
+        }
+    }
+  </style>
 </head>
 <body>
-  <div class="spotify-container">
-    <div class="player-header">
-      <i class="fab fa-spotify spotify-icon"></i>       <h1>Nosso Amor</h1>
-    </div>
-
-    <div class="player-content">
-      <div class="album-art">
-        <img id="slide" src="imgs/slide1.jpg" alt="Nossos Momentos">
-      </div>
-
-      <div class="lyrics-container">
-        <div class="song-info">
-          <div class="song-title">Sempre Juntos</div>
-          <div class="song-artist">Nossa História</div>
-        </div>
-
-        <div class="lyrics" id="lyrics">
-          <p>O nosso amor é a melhor coisa que me aconteceu</p>
-            <p>Cada momento contigo é especial</p>
-            <p>Você é meu hoje e sempre</p>
-            <p>Juntos somos mais fortes</p>
-            <p>Te amo mais que tudo nesse mundo</p>
-            <p>Você completa minha vida</p>
-            <p>Nossa história é meu conto favorito</p>
-            <p>Seu sorriso ilumina meus dias</p>
-            <p>Encontrei em você meu porto seguro</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="initial-play-button-container" id="initial-play-button-container">
-        <button class="control-btn play-btn" id="play-btn-initial"><i class="fas fa-play"></i></button>
+  <div class="spotify-container">
+    <div class="player-header">
+      <!-- Ícone do Spotify usando Font Awesome -->
+      <i class="fab fa-spotify spotify-icon"></i>
+      <h1>Nosso Amor</h1>
     </div>
 
+    <div class="player-content">
+      <div class="album-art">
+        <!-- Imagem principal que será alternada pelo JavaScript -->
+        <img id="slide" src="imgs/slide1.jpg" alt="Nossos Momentos">
+      </div>
+
+      <div class="lyrics-container">
+        <div class="song-info">
+          <div class="song-title">Sempre Juntos</div>
+          <div class="song-artist">Nossa História</div>
+        </div>
+
+        <div class="lyrics" id="lyrics">
+          <!-- Letras da música. O destaque será adicionado/removido pelo JavaScript. -->
+          <p>O nosso amor é a melhor coisa que me aconteceu</p>
+          <p>Cada momento contigo é especial</p>
+          <p>Você é meu hoje e sempre</p>
+          <p>Juntos somos mais fortes</p>
+          <p>Te amo mais que tudo nesse mundo</p>
+          <p>Você completa minha vida</p>
+          <p>Nossa história é meu conto favorito</p>
+          <p>Seu sorriso ilumina meus dias</p>
+          <p>Encontrei em você meu porto seguro</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botão de play/pause fixo no canto inferior direito -->
     <div class="fixed-play-button-container">
-        <button class="play-btn-fixed" id="play-btn-fixed"><i class="fas fa-play"></i></button>
+      <button class="play-btn-fixed" id="play-btn-fixed"><i class="fas fa-play"></i></button>
     </div>
 
-  <audio id="audio" loop>
-    <source src="audio/always.mp3" type="audio/mpeg" />
-  </audio>
+    <!-- Elemento de áudio, com loop para reprodução contínua -->
+    <audio id="audio" loop>
+      <source src="audio/always.mp3" type="audio/mpeg" />
+      Seu navegador não suporta o elemento de áudio.
+    </audio>
 
-  <script>
-    const audio = document.getElementById('audio');
-    const playBtnFixed = document.getElementById('play-btn-fixed'); // Novo botão fixo
-    const initialPlayButtonContainer = document.getElementById('initial-play-button-container'); // Mantido para esconder via JS
-    const lyricsContainer = document.getElementById('lyrics');
-    const slide = document.getElementById('slide');
-    const lyricParagraphs = document.querySelectorAll('#lyrics p'); // Seleciona todos os parágrafos de letras
+  </div>
 
-    const frases = [
-      "O nosso amor é a melhor coisa que me aconteceu",
-      "Cada momento contigo é especial",
-      "Você é meu hoje e sempre",
-      "Juntos somos mais fortes",
-      "Te amo mais que tudo nesse mundo",
-      "Você completa minha vida",
-      "Nossa história é meu conto favorito",
-      "Seu sorriso ilumina meus dias",
-      "Encontrei em você meu porto seguro"
-    ];
+  <script>
+    // Garante que o DOM esteja completamente carregado antes de executar o script
+    document.addEventListener('DOMContentLoaded', () => {
+        // Seleciona os elementos do DOM necessários
+        const audio = document.getElementById('audio'); // O elemento de áudio
+        const playBtnFixed = document.getElementById('play-btn-fixed'); // O botão de play/pause fixo
+        const slide = document.getElementById('slide'); // A imagem do slide
+        const lyricParagraphs = document.querySelectorAll('#lyrics p'); // Todos os parágrafos das letras
 
-    const slides = [
-      "imgs/slide1.jpg", "imgs/slide2.jpg", "imgs/slide3.jpg",
-      "imgs/slide4.jpg", "imgs/slide5.jpg", "imgs/slide6.jpg",
-      "imgs/slide7.jpg", "imgs/slide8.jpg", "imgs/slide9.jpg"
-    ];
+        let currentSlideIndex = 0; // Índice da imagem e frase atual
+        let rotateInterval; // Variável para armazenar o ID do intervalo de rotação
 
-    let currentSlide = 0;
+        // Array de caminhos das imagens (verifique se os nomes dos arquivos estão corretos no seu projeto)
+        const slides = [
+            "imgs/slide1.jpg", "imgs/slide2.jpg", "imgs/slide3.jpg",
+            "imgs/slide4.jpg", "imgs/slide5.jpg", "imgs/slide6.jpg",
+            "imgs/slide7.jpg", "imgs/slide8.jpg", "imgs/slide9.jpg"
+        ];
 
-    // displayLyrics agora só gerencia o destaque, não cria os elementos
-    function displayLyrics() {
-      // Remove destaque de todos os parágrafos
-      lyricParagraphs.forEach(p => p.classList.remove('highlight'));
-      // Adiciona destaque ao parágrafo atual
-      if (lyricParagraphs[currentSlide]) {
-        lyricParagraphs[currentSlide].classList.add('highlight');
-        // Scrolar para a frase atual se o container tiver overflow
-        lyricParagraphs[currentSlide].scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-
-    function rotateContent() {
-      currentSlide = (currentSlide + 1) % slides.length;
-      slide.src = slides[currentSlide];
-      displayLyrics(); // Chama displayLyrics para atualizar o destaque
-    }
-
-    // Event listener para o novo botão de Play/Pause fixo
-    playBtnFixed.addEventListener('click', () => {
-        if (audio.paused) {
-            audio.play();
-            playBtnFixed.innerHTML = '<i class="fas fa-pause"></i>';
-        } else {
-            audio.pause();
-            playBtnFixed.innerHTML = '<i class="fas fa-play"></i>';
+        /**
+         * Atualiza o destaque das letras e rola para a frase atual.
+         * Remove o destaque de todas as frases e aplica-o à frase no `currentSlideIndex`.
+         */
+        function displayLyrics() {
+            // Remove a classe 'highlight' de todos os parágrafos de letra
+            lyricParagraphs.forEach(p => p.classList.remove('highlight'));
+            // Adiciona a classe 'highlight' ao parágrafo de letra atual
+            if (lyricParagraphs[currentSlideIndex]) {
+                lyricParagraphs[currentSlideIndex].classList.add('highlight');
+                // Rola a página para que a frase destacada seja visível (com comportamento suave)
+                lyricParagraphs[currentSlideIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
         }
+
+        /**
+         * Rota o conteúdo: avança para a próxima imagem e destaca a próxima frase.
+         */
+        function rotateContent() {
+            // Incrementa o índice do slide, voltando ao início se chegar ao final do array
+            currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+            // Define a nova imagem do slide
+            slide.src = slides[currentSlideIndex];
+            // Atualiza o destaque das letras de acordo com o novo slide
+            displayLyrics();
+        }
+
+        // Event listener para o botão de Play/Pause fixo
+        playBtnFixed.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play(); // Inicia a reprodução do áudio
+                playBtnFixed.innerHTML = '<i class="fas fa-pause"></i>'; // Altera o ícone para pause
+                // Inicia a rotação de conteúdo apenas quando a música começa a tocar
+                rotateInterval = setInterval(rotateContent, 3500); // Rota a cada 3.5 segundos
+            } else {
+                audio.pause(); // Pausa a reprodução do áudio
+                playBtnFixed.innerHTML = '<i class="fas fa-play"></i>'; // Altera o ícone para play
+                // Para a rotação de conteúdo quando a música é pausada
+                clearInterval(rotateInterval);
+            }
+        });
+
+        // Lógica de Autoplay ao carregar o site
+        // Tenta reproduzir o áudio automaticamente.
+        // Alguns navegadores podem bloquear o autoplay sem interação do usuário.
+        audio.play().then(() => {
+            // Sucesso: Áudio começou a tocar
+            playBtnFixed.innerHTML = '<i class="fas fa-pause"></i>'; // Define o ícone para pause
+            displayLyrics(); // Exibe a primeira frase no carregamento/início
+            rotateInterval = setInterval(rotateContent, 3500); // Inicia a rotação de conteúdo
+        }).catch(error => {
+            // Falha: Autoplay foi bloqueado (ex: devido a políticas do navegador)
+            console.warn("Autoplay foi bloqueado. Por favor, clique no botão de play para iniciar o áudio.", error);
+            playBtnFixed.innerHTML = '<i class="fas fa-play"></i>'; // Garante que o ícone de play seja exibido
+            // A rotação de conteúdo não é iniciada automaticamente se o áudio não tocar
+        });
+
+        // Exibe o destaque da primeira frase quando a página carrega.
+        // Isso garante que a primeira frase esteja destacada mesmo que o autoplay falhe.
+        displayLyrics();
     });
-
-    // Esconde o container do botão de autoplay inicial (garante que não apareça)
-    initialPlayButtonContainer.style.display = 'none';
-
-    displayLyrics(); // Exibe a primeira frase no carregamento
-    setInterval(rotateContent, 3500); // Inicia a rotação de conteúdo
-  </script>
+  </script>
 </body>
 </html>
