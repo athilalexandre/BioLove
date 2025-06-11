@@ -1,10 +1,9 @@
 {
+  "/not-found": "app/not-found.js",
   "/admin/create/page": "app/admin/create/page.js",
-  "/api/logout/route": "app/api/logout/route.js",
-  "/admin/login/page": "app/admin/login/page.js",
-  "/api/login/route": "app/api/login/route.js",
-  "/api/experiences/route": "app/api/experiences/route.js",
+  "/page": "app/page.js",
   "/experience/[id]/page": "app/experience/[id]/page.js",
+  "/api/experiences/route": "app/api/experiences/route.js",
   "/api/experiences/[id]/route": "app/api/experiences/[id]/route.js",
   "/api/photos/[filename]/route": "app/api/photos/[filename]/route.js"
 }

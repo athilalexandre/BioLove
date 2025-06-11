@@ -6,10 +6,16 @@
   :root {
     --font-inter: 'Inter', sans-serif;
     --font-playfair: 'Playfair Display', serif;
+    
+    /* Cores personalizáveis para a experiência */
+    --photo-border-color: #f0abfc; /* Cor da borda da foto */
+    --player-button-color: #e91e63; /* Cor dos botões do player */
   }
 
   body {
     @apply antialiased;
+    background-color: black; /* Garante que o fundo seja preto */
+    background-image: none; /* Remove qualquer imagem de fundo padrão */
   }
 }
 
@@ -25,4 +31,23 @@
   .form-label {
     @apply block text-sm font-medium text-gray-700;
   }
+}
+
+/* Custom styles for the volume slider thumb - moved here for global scope */
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.volume-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
 } 
