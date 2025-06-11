@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import ReactPlayer from 'react-player';
 import { motion, AnimatePresence } from 'framer-motion';
+import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from 'react-icons/fa';
 
 export interface Experience {
   id: string;
@@ -19,9 +20,11 @@ export default function ExperiencePage() {
   const [experience, setExperience] = useState<Experience | null>(null);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [currentBackgroundPhotoIndex, setCurrentBackgroundPhotoIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
   const [musicDuration, setMusicDuration] = useState(0);
   const messageRef = useRef<HTMLParagraphElement>(null);
+  const playerRef = useRef<ReactPlayer>(null);
   const params = useParams();
   const id = params?.id as string;
 
@@ -94,7 +97,7 @@ export default function ExperiencePage() {
     if (experience?.backgroundPhotos && experience.backgroundPhotos.length > 1) {
       const interval = setInterval(() => {
         setCurrentBackgroundPhotoIndex((prev) =>
-          prev === experience.backgroundPhotos.length - 1 ? 0 : prev + 1
+          prev === experience.backgroundPhotos!.length - 1 ? 0 : prev + 1
         );
       }, 10000);
 
@@ -112,16 +115,16 @@ export default function ExperiencePage() {
     );
   }
 
-  const { photos, message, musicUrl, backgroundPhotos } = experience;
+  const { photos, message, musicUrl, backgroundPhotos = [] } = experience;
 
   return (
     <div className="min-h-screen bg-black text-white relative overflow-hidden">
-      {backgroundPhotos && backgroundPhotos.length > 0 && (
+      {backgroundPhotos.length > 0 && (
         <div className="fixed inset-0 z-0">
           <AnimatePresence mode="wait">
             <motion.img
               key={currentBackgroundPhotoIndex}
-              src={backgroundPhotos[currentBackgroundPhotoIndex]}
+              src={backgroundPhotos[currentBackgroundPhotoIndex] || ''}
               alt="Background"
               className="w-full h-full object-cover opacity-20 transition-opacity duration-1000"
               initial={{ opacity: 0 }}
@@ -141,7 +144,7 @@ export default function ExperiencePage() {
                 key={currentPhotoIndex}
                 src={photos[currentPhotoIndex]}
                 alt="Experience Photo"
-                className="rounded-lg shadow-lg w-full h-auto max-h-[400px] object-contain"
+                className="rounded-lg shadow-lg w-full h-auto max-h-[500px] object-contain"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
@@ -166,19 +169,37 @@ export default function ExperiencePage() {
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-black bg-opacity-70 z-20">
-        <div className="max-w-2xl mx-auto">
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-black bg-opacity-70 z-20 flex justify-center items-center">
+        <div className="max-w-2xl mx-auto flex space-x-4">
           <ReactPlayer
+            ref={playerRef}
             url={musicUrl}
-            width="100%"
-            height="80px"
-            playing={true}
-            controls
+            width="0px"
+            height="0px"
+            playing={isPlaying}
+            muted={isMuted}
             onPlay={() => setIsPlaying(true)}
             onPause={() => setIsPlaying(false)}
             onEnded={() => setIsPlaying(false)}
             onDuration={setMusicDuration}
+            config={{
+              youtube: { playerVars: { autoplay: 1 } },
+              vimeo: { playerOptions: { autoplay: true } },
+              soundcloud: { options: { auto_play: true } },
+            }}
           />
+          <button
+            onClick={() => setIsPlaying(!isPlaying)}
+            className="text-white p-3 rounded-full bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors"
+          >
+            {isPlaying ? <FaPause size={24} /> : <FaPlay size={24} />}
+          </button>
+          <button
+            onClick={() => setIsMuted(!isMuted)}
+            className="text-white p-3 rounded-full bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors"
+          >
+            {isMuted ? <FaVolumeMute size={24} /> : <FaVolumeUp size={24} />}
+          </button>
         </div>
       </div>
 
