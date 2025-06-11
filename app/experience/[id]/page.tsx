@@ -34,7 +34,6 @@ export default function ExperiencePage() {
   const id = params?.id as string;
   const [sentences, setSentences] = useState<string[]>([]);
   const [currentSentenceIndex, setCurrentSentenceIndex] = useState(0);
-  const [hasCompletedFirstCycle, setHasCompletedFirstCycle] = useState(false);
   const SENTENCE_DURATION_MS = 5000; // 5 seconds
 
   // Helper function to split message into sentences
@@ -70,49 +69,41 @@ export default function ExperiencePage() {
   }, [experience?.message]);
 
   useEffect(() => {
-    if (!messageRef.current || !isPlaying || sentences.length === 0) return;
+    if (!messageRef.current || sentences.length === 0) return;
 
     const container = messageRef.current;
     const sentenceElements = Array.from(container.children) as HTMLElement[];
 
     if (sentenceElements.length === 0) return;
 
+    // Scroll the container to keep the current sentence visible
+    const currentSentenceElement = sentenceElements[currentSentenceIndex];
+    if (currentSentenceElement) {
+      currentSentenceElement.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [currentSentenceIndex, sentences]); // Dependency array for scrolling
+
+  useEffect(() => {
+    if (!messageRef.current || sentences.length === 0) return;
+
+    const container = messageRef.current;
     const durationPerSentence = SENTENCE_DURATION_MS; 
 
     let startTime: DOMHighResTimeStamp | null = null;
-    let currentSentenceEndTime: number = 0; // Time when the current sentence animation should end
+    let currentSentenceEndTime: number = 0;
 
     const animateScroll = (currentTime: DOMHighResTimeStamp) => {
       if (!startTime) {
         startTime = currentTime;
-        currentSentenceEndTime = startTime + durationPerSentence; // Set end time for the first sentence
+        currentSentenceEndTime = startTime + durationPerSentence;
       }
 
-      // Check if it's time to move to the next sentence
       if (currentTime >= currentSentenceEndTime) {
         setCurrentSentenceIndex(prevIndex => {
           const nextIndex = (prevIndex + 1) % sentences.length;
-          if (nextIndex === 0 && prevIndex === sentences.length - 1) {
-            // If we've looped back to the first sentence after completing all sentences
-            setHasCompletedFirstCycle(true); // Mark that the first cycle is complete
-          }
-          currentSentenceEndTime = currentTime + durationPerSentence; // Set end time for the next sentence
+          currentSentenceEndTime = currentTime + durationPerSentence;
           return nextIndex;
         });
-      }
-
-      // Scroll the container to keep the current sentence visible
-      const currentSentenceElement = sentenceElements[currentSentenceIndex];
-      if (currentSentenceElement) {
-        const sentenceTop = currentSentenceElement.offsetTop;
-        const sentenceBottom = sentenceTop + currentSentenceElement.clientHeight;
-        
-        const currentScrollTop = container.scrollTop;
-        const currentScrollBottom = currentScrollTop + container.clientHeight;
-
-        if (sentenceTop < currentScrollTop || sentenceBottom > currentScrollBottom) {
-          container.scrollTop = sentenceTop - (container.clientHeight / 2) + (currentSentenceElement.clientHeight / 2); // Center the sentence
-        }
       }
 
       animationFrameIdRef.current = requestAnimationFrame(animateScroll);
@@ -121,17 +112,7 @@ export default function ExperiencePage() {
     animationFrameIdRef.current = requestAnimationFrame(animateScroll);
 
     return () => cancelAnimationFrame(animationFrameIdRef.current as number);
-  }, [sentences, currentSentenceIndex]);
-
-  useEffect(() => {
-    if (!isPlaying && musicDuration > 0 && playerRef.current) {
-      // This effect runs when music is paused or duration is available. Used to re-align if needed.
-      // If music is paused, ensure text doesn't scroll.
-      if (animationFrameIdRef.current) {
-        cancelAnimationFrame(animationFrameIdRef.current);
-      }
-    }
-  }, [isPlaying, musicDuration]);
+  }, [sentences]);
 
   useEffect(() => {
     if (experience?.photos && experience.photos.length > 1) {
@@ -218,15 +199,7 @@ export default function ExperiencePage() {
         </div>
       )}
 
-      {/* Title at the very top, centered */}
-      <div className="fixed top-0 left-0 right-0 z-40 flex justify-center p-4">
-        <h1 className="text-6xl font-bold text-center text-pink-400 drop-shadow-lg leading-tight tracking-wide">
-          {title}
-        </h1>
-      </div>
-
       <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col items-center justify-center p-4 lg:p-8 space-y-8 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-12 min-h-[calc(100vh-100px)] pt-24">
-        {/* Removed: Title and sub-title at top right */}
         
         <div className="w-full flex justify-center items-center lg:col-span-1">
           {photos.length > 0 && (
@@ -258,46 +231,46 @@ export default function ExperiencePage() {
             style={{ 
               minHeight: '250px',
               height: 'auto',
-              maxHeight: 'min(calc(100vh - 250px), 600px)'
+              maxHeight: 'min(calc(100vh - 250px), 600px)',
+              willChange: 'transform'
             }}
             ref={messageRef}
           >
-            <AnimatePresence mode="wait">
-              {sentences.map((sentence, index) => {
-                const distance = Math.abs(index - currentSentenceIndex);
+            {sentences.map((sentence, index) => {
+              const distance = Math.abs(index - currentSentenceIndex);
   
-                const opacity = 1 - Math.min(distance * 0.3, 0.7); // 0.7 ensures a minimum visible opacity for far-away sentences
-                const blur = Math.min(distance * 2, 8); // Max blur 8px
-
-                return (
-                  <motion.p 
-                    key={index} 
-                    className={`font-sans text-gray-200 text-center`}
-                    style={{ 
-                      fontWeight: index === currentSentenceIndex ? 'bold' : 'normal',
-                      fontSize: index === currentSentenceIndex ? '3rem' : '1.75rem', // Smaller font sizes
-                      lineHeight: '1.6', // Adjusted for spacing
-                      opacity,
-                      filter: `blur(${blur}px)`,
-                      transition: 'all 0.5s ease-out' 
-                    }}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    {sentence.trim()}
-                  </motion.p>
-                );
-              })}
-            </AnimatePresence>
+              return (
+                <p 
+                  key={index} 
+                  className={`font-sans text-gray-200 text-center`}
+                  style={{ 
+                    fontWeight: index === currentSentenceIndex ? 'bold' : 'normal',
+                    fontSize: index === currentSentenceIndex ? '1.875rem' : '1rem',
+                    lineHeight: '1.4',
+                    minHeight: '42px',
+                    transform: 'translateZ(0)',
+                    backfaceVisibility: 'hidden',
+                    WebkitFontSmoothing: 'antialiased',
+                    MozOsxFontSmoothing: 'grayscale',
+                    opacity: index === currentSentenceIndex ? 1 : 0.4,
+                    transition: 'opacity 0.3s ease-out' // Smooth opacity transition
+                  }}
+                >
+                  {sentence.trim()}
+                </p>
+              );
+            })}
           </motion.div>
         </div>
       </div>
   
-      {/* Removed: AnimatePresence for title at bottom */}
-  
-      <div className="fixed bottom-0 left-0 right-0 p-4 z-20 flex flex-col items-center justify-center">
+      <div className="fixed top-0 left-0 right-0 z-40 flex justify-center p-4">
+        <h1 className="text-6xl font-bold text-center text-pink-400 drop-shadow-lg leading-tight tracking-wide">
+          {title}
+        </h1>
+      </div>
+
+      <div className="fixed bottom-0 left-0 right-0 p-0 z-20 flex flex-col items-center justify-center">
         <div className="w-full max-w-xl mx-auto flex items-center space-x-4 p-2 rounded-full shadow-xl">
           <ReactPlayer
             ref={playerRef}
@@ -358,7 +331,6 @@ export default function ExperiencePage() {
             />
           </div>
         </div>
-        {/* Removed: Separate progress bar container */}
       </div>
 
       <style jsx global>{`
@@ -389,14 +361,6 @@ export default function ExperiencePage() {
           background: var(--thumb-color); /* Use CSS variable */
           cursor: pointer;
         }
-
-        /* Removed global track styles, now inline */
-        /* .volume-slider::-webkit-slider-runnable-track { }
-        .volume-slider::-moz-range-track { } */
-
-        /* Removed custom progress bar styles as it's no longer a separate component */
-        /* .progress-bar-container { }
-        .progress-bar-fill { } */
       `}</style>
     </div>
   );
