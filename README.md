@@ -64,6 +64,16 @@ npm run dev
 2. Log in with your admin credentials
 3. Create new experiences by uploading photos, adding music, and writing messages
 
+#### Changing Admin Credentials
+
+Admin login and password are managed directly through Firebase Authentication. To change credentials:
+
+1. Go to your [Firebase Console](https://console.firebase.google.com/).
+2. Select your project.
+3. In the left-hand menu, navigate to "Authentication" under the "Build" section.
+4. Go to the "Users" tab.
+5. Here you can add new users, delete existing ones, or change passwords for existing users (by clicking on the user and then "reset password").
+
 ### Experience Viewing
 
 1. Share the generated experience URL with the couple
