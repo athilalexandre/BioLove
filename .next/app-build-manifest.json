@@ -16,10 +16,10 @@
       "static/chunks/main-app.js",
       "static/chunks/app/admin/create/page.js"
     ],
-    "/experience/[id]/page": [
+    "/admin/login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/experience/[id]/page.js"
+      "static/chunks/app/admin/login/page.js"
     ]
   }
 }
