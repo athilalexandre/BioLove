@@ -121,7 +121,7 @@ export default function ExperiencePage() {
     animationFrameIdRef.current = requestAnimationFrame(animateScroll);
 
     return () => cancelAnimationFrame(animationFrameIdRef.current as number);
-  }, [sentences, isPlaying, currentSentenceIndex]);
+  }, [sentences, currentSentenceIndex]);
 
   useEffect(() => {
     if (!isPlaying && musicDuration > 0 && playerRef.current) {
@@ -200,7 +200,7 @@ export default function ExperiencePage() {
   const { photos, message, musicUrl, backgroundPhotos = [], title } = experience;
 
   return (
-    <div className="min-h-screen bg-black text-white relative overflow-hidden">
+    <div className="min-h-screen bg-stone-950 text-white relative flex flex-col items-center justify-center overflow-hidden">
       {backgroundPhotos.length > 0 && (
         <div className="fixed inset-0 z-0">
           <AnimatePresence mode="wait">
@@ -208,9 +208,9 @@ export default function ExperiencePage() {
               key={currentBackgroundPhotoIndex}
               src={backgroundPhotos[currentBackgroundPhotoIndex] || ''}
               alt="Background"
-              className="w-full h-full object-cover opacity-20 transition-opacity duration-1000"
+              className="w-full h-full object-cover opacity-10 transition-opacity duration-1000"
               initial={{ opacity: 0 }}
-              animate={{ opacity: 0.2 }}
+              animate={{ opacity: 0.1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 1 }}
             />
@@ -218,40 +218,43 @@ export default function ExperiencePage() {
         </div>
       )}
 
-      <div className="relative z-10 min-h-screen flex flex-col lg:flex-row items-center lg:items-start justify-center p-4 lg:p-8 space-y-8 lg:space-y-0 lg:space-x-12 max-w-7xl mx-auto w-full">
-        {/* Title and sub-title at top right */}
-        <div className="absolute top-8 right-8 text-right z-20">
-          <p className="text-4xl font-playfair text-pink-300 drop-shadow-lg">Sempre Juntos</p>
-          <p className="text-lg font-sans text-gray-300 mt-1">Nossa História</p>
-        </div>
+      {/* Title at the very top, centered */}
+      <div className="fixed top-0 left-0 right-0 z-40 flex justify-center p-4">
+        <h1 className="text-6xl font-bold text-center text-pink-400 drop-shadow-lg leading-tight tracking-wide">
+          {title}
+        </h1>
+      </div>
 
-        <div className="w-full lg:w-1/2 flex justify-center">
+      <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col items-center justify-center p-4 lg:p-8 space-y-8 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-12 min-h-[calc(100vh-100px)] pt-24">
+        {/* Removed: Title and sub-title at top right */}
+        
+        <div className="w-full flex justify-center items-center lg:col-span-1">
           {photos.length > 0 && (
             <AnimatePresence mode="wait">
               <motion.img
                 key={currentPhotoIndex}
                 src={photos[currentPhotoIndex]}
                 alt="Experience Photo"
-                className="rounded-xl shadow-2xl w-full object-contain transition-all duration-300 ease-in-out"
+                className="rounded-2xl shadow-xl w-full object-contain transition-all duration-300 ease-in-out"
                 style={{ 
                   maxWidth: 'min(calc(100vw - 64px), 600px)',
                   maxHeight: 'min(calc(100vh - 200px), 600px)',
                 }}
-                initial={{ opacity: 0, scale: 0.9 }}
+                initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
+                exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.5 }}
               />
             </AnimatePresence>
           )}
         </div>
 
-        <div className="w-full lg:w-1/2 flex flex-col items-center justify-center">
+        <div className="w-full flex flex-col items-center justify-center lg:col-span-1">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5 }}
-            className="message-scroll-container max-w-3xl mx-auto px-8 py-12 bg-black/60 rounded-xl relative overflow-y-auto"
+            className="message-scroll-container max-w-3xl mx-auto px-10 py-14 bg-black/60 rounded-xl relative overflow-y-auto backdrop-blur-sm"
             style={{ 
               minHeight: '250px',
               height: 'auto',
@@ -263,15 +266,20 @@ export default function ExperiencePage() {
               {sentences.map((sentence, index) => {
                 const distance = Math.abs(index - currentSentenceIndex);
   
+                const opacity = 1 - Math.min(distance * 0.3, 0.7); // 0.7 ensures a minimum visible opacity for far-away sentences
+                const blur = Math.min(distance * 2, 8); // Max blur 8px
+
                 return (
                   <motion.p 
                     key={index} 
-                    className={`font-sans leading-relaxed text-gray-200 text-center`}
+                    className={`font-sans text-gray-200 text-center`}
                     style={{ 
                       fontWeight: index === currentSentenceIndex ? 'bold' : 'normal',
-                      fontSize: index === currentSentenceIndex ? '3.25rem' : '2.25rem', // Slightly larger font sizes
-                      lineHeight: index === currentSentenceIndex ? '1.2' : '1.4', // Adjust line height for better spacing
-                      transition: 'all 0.5s ease-out' // Smoother transition for all properties
+                      fontSize: index === currentSentenceIndex ? '3rem' : '1.75rem', // Smaller font sizes
+                      lineHeight: '1.6', // Adjusted for spacing
+                      opacity,
+                      filter: `blur(${blur}px)`,
+                      transition: 'all 0.5s ease-out' 
                     }}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -286,26 +294,11 @@ export default function ExperiencePage() {
           </motion.div>
         </div>
       </div>
-
-      <AnimatePresence>
-        {hasCompletedFirstCycle && (
-          <motion.div
-            key="title-display"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="fixed bottom-[110px] left-0 right-0 z-30 flex justify-center p-4"
-          >
-            <h2 className="text-6xl font-bold text-center text-pink-400 drop-shadow-lg leading-tight tracking-wide">
-              {title}
-            </h2>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-zinc-900/90 z-20 flex flex-col items-center justify-center">
-        <div className="w-full max-w-xl mx-auto flex items-center space-x-4 p-3 rounded-full bg-zinc-800 shadow-xl">
+  
+      {/* Removed: AnimatePresence for title at bottom */}
+  
+      <div className="fixed bottom-0 left-0 right-0 p-4 z-20 flex flex-col items-center justify-center">
+        <div className="w-full max-w-xl mx-auto flex items-center space-x-4 p-2 rounded-full shadow-xl">
           <ReactPlayer
             ref={playerRef}
             url={musicUrl}
@@ -331,7 +324,7 @@ export default function ExperiencePage() {
           >
             {isPlaying ? <FaPause size={24} /> : <FaPlay size={24} />}
           </button>
-
+  
           <div className="flex-grow flex items-center space-x-2">
             <span className="text-gray-400 text-sm flex-shrink-0">{formatTime(playedSeconds)}</span>
             <div className="flex-grow relative h-1.5 bg-zinc-700 rounded-full overflow-hidden cursor-pointer" onClick={handleProgressBarClick}>
@@ -342,7 +335,7 @@ export default function ExperiencePage() {
             </div>
             <span className="text-gray-400 text-sm flex-shrink-0">{formatTime(musicDuration)}</span>
           </div>
-
+  
           <div className="flex items-center space-x-2 flex-shrink-0">
             <button
               onClick={() => setIsMuted(!isMuted)}
@@ -357,15 +350,15 @@ export default function ExperiencePage() {
               step="0.01"
               value={isMuted ? 0 : volume}
               onChange={handleVolumeChange}
-              className="w-24 h-1.5 rounded-full appearance-none cursor-pointer range-sm bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 volume-slider"
+              className="w-24 h-1.5 rounded-full appearance-none cursor-pointer range-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 volume-slider"
               style={{
-                '--range-progress': `${(isMuted ? 0 : volume) * 100}%`,
-                '--track-color': '#52525B',
+                background: `linear-gradient(to right, #1DB954 ${((isMuted ? 0 : volume) * 100)}%, #52525B ${((isMuted ? 0 : volume) * 100)}%)`,
                 '--thumb-color': '#1DB954'
               } as React.CSSProperties}
             />
           </div>
         </div>
+        {/* Removed: Separate progress bar container */}
       </div>
 
       <style jsx global>{`
@@ -384,7 +377,7 @@ export default function ExperiencePage() {
           width: 14px;
           height: 14px;
           border-radius: 50%;
-          background: #ffffff;
+          background: var(--thumb-color); /* Use CSS variable */
           cursor: pointer;
           margin-top: -1px; /* Center thumb vertically */
         }
@@ -393,35 +386,17 @@ export default function ExperiencePage() {
           width: 14px;
           height: 14px;
           border-radius: 50%;
-          background: #ffffff;
+          background: var(--thumb-color); /* Use CSS variable */
           cursor: pointer;
         }
 
-        .volume-slider::-webkit-slider-runnable-track {
-            background: linear-gradient(to right, #1DB954 var(--range-progress), #555 var(--range-progress)); /* Spotify green */
-            border-radius: 9999px;
-        }
+        /* Removed global track styles, now inline */
+        /* .volume-slider::-webkit-slider-runnable-track { }
+        .volume-slider::-moz-range-track { } */
 
-        .volume-slider::-moz-range-track {
-            background: linear-gradient(to right, #1DB954 var(--range-progress), #555 var(--range-progress)); /* Spotify green */
-            border-radius: 9999px;
-        }
-
-        /* Custom progress bar styles */
-        .progress-bar-container {
-            width: 100%;
-            height: 4px;
-            background-color: #555; /* Dark gray for background */
-            border-radius: 2px;
-            margin-top: 8px; /* Space between controls and progress bar */
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            background-color: #1DB954; /* Spotify green */
-            border-radius: 2px;
-            transition: width 0.1s linear; /* Smooth progress */
-        }
+        /* Removed custom progress bar styles as it's no longer a separate component */
+        /* .progress-bar-container { }
+        .progress-bar-fill { } */
       `}</style>
     </div>
   );
