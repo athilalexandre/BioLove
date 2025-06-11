@@ -168,5 +168,25 @@
     "createdBy": "admin",
     "id": "d0a70e4a-cc05-431d-8591-b0baabb6e557",
     "createdAt": "2025-06-11T14:07:59.614Z"
+  },
+  {
+    "message": "Nossa história é construída dia após dia, com base na confiança mútua, no respeito e em um amor que se aprofunda a cada novo amanhecer. Compartilhamos sonhos, medos, risadas e, acima de tudo, a certeza de que somos um time inseparável. É na simplicidade do nosso cotidiano que encontramos a verdadeira magia, seja em um café da manhã tranquilo, em uma caminhada no parque ou em uma conversa despretensiosa sobre o futuro. Ela me ensinou o verdadeiro significado de amar e ser amado, e sou eternamente grato por ter a sorte de compartilhar a vida ao seu lado.",
+    "title": "Meu tudo!!",
+    "musicUrl": "https://www.youtube.com/watch?v=JqIHlDVqUTw",
+    "photos": [
+      "/api/photos/f178738d-47e4-409d-a598-67cd31499d72-1000041736.jpg",
+      "/api/photos/8e164f1b-fb5b-470d-80a4-fee5b499a7bb-ChatGPT Image 1 de abr. de 2025, 08_06_52.png"
+    ],
+    "backgroundPhotos": [
+      "/api/photos/457a2ce5-25df-41d6-be2f-52a3219b7a13-330727.jpg",
+      "/api/photos/e5a8ba31-6186-4134-811c-e14b589e643f-332878.png",
+      "/api/photos/89cbdfbf-6447-413b-9e7e-bd6730183021-333143.png",
+      "/api/photos/3daae536-285b-4c08-b732-27fec999d460-333617.png",
+      "/api/photos/1d25c46c-2652-4aab-982a-078b0af7a4c8-476288.jpg",
+      "/api/photos/57165910-1446-427e-8ca9-34edc14d895a-547157.jpg"
+    ],
+    "createdBy": "admin",
+    "id": "12c393c5-dae1-416c-868b-d0fec710bdb5",
+    "createdAt": "2025-06-11T14:17:02.583Z"
   }
 ]
