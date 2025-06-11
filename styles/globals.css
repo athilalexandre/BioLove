@@ -6,16 +6,11 @@
   :root {
     --font-inter: 'Inter', sans-serif;
     --font-playfair: 'Playfair Display', serif;
-    
-    /* Cores personalizáveis para a experiência */
-    --photo-border-color: #f0abfc; /* Cor da borda da foto */
-    --player-button-color: #e91e63; /* Cor dos botões do player */
   }
 
   body {
     @apply antialiased;
-    background-color: black; /* Garante que o fundo seja preto */
-    background-image: none; /* Remove qualquer imagem de fundo padrão */
+    background-color: black !important; /* Garante que o fundo seja preto, a menos que sobreposto por uma imagem */
   }
 }
 
@@ -50,4 +45,13 @@
   border-radius: 50%;
   background: #ffffff;
   cursor: pointer;
+}
+
+.message-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+.message-scroll-container {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 } 

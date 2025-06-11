@@ -24,10 +24,20 @@ export default function ExperiencePage() {
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(0.8);
   const [musicDuration, setMusicDuration] = useState(0);
-  const messageRef = useRef<HTMLParagraphElement>(null);
+  const messageRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<ReactPlayer>(null);
   const params = useParams();
   const id = params?.id as string;
+  const [sentences, setSentences] = useState<string[]>([]);
+  const [currentSentenceIndex, setCurrentSentenceIndex] = useState(0);
+
+  // Helper function to split message into sentences
+  const splitIntoSentences = (text: string): string[] => {
+    // This regex splits by common sentence-ending punctuation, including handling of abbreviations.
+    // It keeps the punctuation with the sentence.
+    const sentenceRegex = /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?|!)\s+/g;
+    return text.split(sentenceRegex).filter(s => s.trim() !== '');
+  };
 
   useEffect(() => {
     if (id) {
@@ -48,29 +58,64 @@ export default function ExperiencePage() {
   }, [id]);
 
   useEffect(() => {
-    const paragraph = messageRef.current;
-    if (!paragraph || !musicDuration || !isPlaying) return;
+    if (experience?.message) {
+      setSentences(splitIntoSentences(experience.message));
+    }
+  }, [experience?.message]);
 
-    const scrollHeight = paragraph.scrollHeight;
-    const clientHeight = paragraph.clientHeight;
+  useEffect(() => {
+    if (!messageRef.current || !musicDuration || !isPlaying || sentences.length === 0) return;
 
-    if (scrollHeight <= clientHeight) return;
+    const container = messageRef.current;
+    const sentenceElements = Array.from(container.children) as HTMLElement[];
 
-    const scrollDistance = scrollHeight - clientHeight;
-    const scrollSpeed = scrollDistance / musicDuration;
+    if (sentenceElements.length === 0) return;
+
+    const totalTextHeight = container.scrollHeight;
+    const visibleHeight = container.clientHeight;
+    const scrollableHeight = totalTextHeight - visibleHeight;
+
+    const totalAnimationDuration = musicDuration * 1000; // Convert to milliseconds
+    const durationPerSentence = totalAnimationDuration / sentences.length;
 
     let startTime: DOMHighResTimeStamp | null = null;
     let animationFrameId: number;
+    let currentSentenceEndTime: number = 0; // Time when the current sentence animation should end
 
     const animateScroll = (currentTime: DOMHighResTimeStamp) => {
-      if (!startTime) startTime = currentTime;
-      const elapsedTime = (currentTime - startTime) / 1000;
-
-      let newScrollTop = (elapsedTime * scrollSpeed) % scrollHeight;
-      if (newScrollTop > scrollDistance) {
-        newScrollTop = newScrollTop - scrollDistance;
+      if (!startTime) {
+        startTime = currentTime;
+        currentSentenceEndTime = startTime + durationPerSentence; // Set end time for the first sentence
       }
-      paragraph.scrollTop = newScrollTop;
+
+      const elapsedTime = currentTime - startTime;
+
+      // Check if it's time to move to the next sentence
+      if (currentTime >= currentSentenceEndTime) {
+        setCurrentSentenceIndex(prevIndex => {
+          const nextIndex = (prevIndex + 1) % sentences.length;
+          if (nextIndex === 0 && playerRef.current) {
+            // Loop back to start if needed, and reset player if it's a full loop
+            // playerRef.current.seekTo(0); // This might cause issues, better let player handle loop
+          }
+          currentSentenceEndTime = currentTime + durationPerSentence; // Set end time for the next sentence
+          return nextIndex;
+        });
+      }
+
+      // Scroll the container to keep the current sentence visible
+      const currentSentenceElement = sentenceElements[currentSentenceIndex];
+      if (currentSentenceElement) {
+        const sentenceTop = currentSentenceElement.offsetTop;
+        const sentenceBottom = sentenceTop + currentSentenceElement.clientHeight;
+        
+        const currentScrollTop = container.scrollTop;
+        const currentScrollBottom = currentScrollTop + visibleHeight;
+
+        if (sentenceTop < currentScrollTop || sentenceBottom > currentScrollBottom) {
+          container.scrollTop = sentenceTop - (visibleHeight / 2) + (currentSentenceElement.clientHeight / 2); // Center the sentence
+        }
+      }
 
       animationFrameId = requestAnimationFrame(animateScroll);
     };
@@ -78,7 +123,7 @@ export default function ExperiencePage() {
     animationFrameId = requestAnimationFrame(animateScroll);
 
     return () => cancelAnimationFrame(animationFrameId);
-  }, [experience?.message, musicDuration, isPlaying]);
+  }, [sentences, musicDuration, isPlaying, currentSentenceIndex]);
 
   useEffect(() => {
     if (experience?.photos && experience.photos.length > 1) {
@@ -150,8 +195,11 @@ export default function ExperiencePage() {
                 key={currentPhotoIndex}
                 src={photos[currentPhotoIndex]}
                 alt="Experience Photo"
-                className="rounded-xl shadow-2xl w-full max-w-md lg:max-w-lg h-auto object-contain transition-all duration-300 ease-in-out"
-                style={{ border: '8px solid var(--photo-border-color, #f0abfc)' }}
+                className="rounded-xl shadow-2xl w-full object-contain transition-all duration-300 ease-in-out"
+                style={{ 
+                  maxWidth: 'min(calc(100vw - 64px), 600px)',
+                  maxHeight: 'min(calc(100vh - 200px), 600px)',
+                }}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
@@ -166,18 +214,28 @@ export default function ExperiencePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5 }}
-            className="message-scroll-container max-w-2xl text-center lg:text-left text-white px-6 py-8 rounded-xl bg-black bg-opacity-80 shadow-lg relative leading-relaxed tracking-wide"
-            style={{ maxHeight: 'min(100vh - 200px, 500px)' }}
+            className="message-scroll-container max-w-full mx-auto px-8 py-10 bg-black bg-opacity-70 relative overflow-y-auto"
+            style={{ 
+              minHeight: '100px',
+              height: 'auto',
+              maxHeight: 'min(calc(100vh - 250px), 600px)'
+            }}
+            ref={messageRef}
           >
-            <p ref={messageRef} className="text-xl md:text-2xl font-serif leading-relaxed whitespace-pre-wrap drop-shadow-md">
-              {message}
-            </p>
+            {sentences.map((sentence, index) => (
+              <p 
+                key={index} 
+                className={`text-2xl md:text-3xl font-sans leading-loose text-gray-200 text-center transition-opacity duration-500 ${index === currentSentenceIndex ? 'opacity-100 font-bold' : 'opacity-40'}`}
+              >
+                {sentence.trim()}
+              </p>
+            ))}
           </motion.div>
         </div>
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent via-black/70 z-20 flex flex-col items-center justify-center">
-        <div className="max-w-xs mx-auto flex items-center space-x-4 p-3 rounded-full custom-player-bg shadow-lg">
+        <div className="w-full max-w-2xl mx-auto flex items-center space-x-4 p-4 rounded-full bg-primary-900/80 shadow-lg">
           <ReactPlayer
             ref={playerRef}
             url={musicUrl}
@@ -198,9 +256,9 @@ export default function ExperiencePage() {
           />
           <button
             onClick={() => setIsPlaying(!isPlaying)}
-            className="text-white p-3 rounded-full custom-control-bg hover:scale-110 transition-transform focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+            className="text-white p-3.5 rounded-full bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-transform hover:scale-105"
           >
-            {isPlaying ? <FaPause size={28} /> : <FaPlay size={28} />}
+            {isPlaying ? <FaPause size={24} /> : <FaPlay size={24} />}
           </button>
 
           <input
@@ -210,14 +268,15 @@ export default function ExperiencePage() {
             step="0.01"
             value={isMuted ? 0 : volume}
             onChange={handleVolumeChange}
-            className="w-full h-2 rounded-lg appearance-none cursor-pointer range-lg bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 volume-slider"
+            className="flex-grow h-2 rounded-lg appearance-none cursor-pointer range-lg bg-white/30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 volume-slider"
+            style={{ '--range-progress': `${(isMuted ? 0 : volume) * 100}%` } as React.CSSProperties}
           />
 
           <button
             onClick={() => setIsMuted(!isMuted)}
-            className="text-white p-3 rounded-full custom-control-bg hover:scale-110 transition-transform focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+            className="text-white p-3.5 rounded-full bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-transform hover:scale-105"
           >
-            {isMuted || volume === 0 ? <FaVolumeMute size={28} /> : <FaVolumeUp size={28} />}
+            {isMuted || volume === 0 ? <FaVolumeMute size={24} /> : <FaVolumeUp size={24} />}
           </button>
         </div>
       </div>
@@ -245,22 +304,14 @@ export default function ExperiencePage() {
           background-color: var(--player-button-color);
         }
 
-        .volume-slider::-webkit-slider-thumb {
-          -webkit-appearance: none;
-          appearance: none;
-          width: 16px;
-          height: 16px;
-          border-radius: 50%;
-          background: #ffffff;
-          cursor: pointer;
+        .volume-slider::-webkit-slider-runnable-track {
+          background: linear-gradient(to right, var(--player-button-color) var(--range-progress), #6b7280 var(--range-progress));
+          border-radius: 9999px;
         }
 
-        .volume-slider::-moz-range-thumb {
-          width: 16px;
-          height: 16px;
-          border-radius: 50%;
-          background: #ffffff;
-          cursor: pointer;
+        .volume-slider::-moz-range-track {
+          background: linear-gradient(to right, var(--player-button-color) var(--range-progress), #6b7280 var(--range-progress));
+          border-radius: 9999px;
         }
       `}</style>
     </div>

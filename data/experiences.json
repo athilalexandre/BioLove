@@ -98,5 +98,57 @@
     "createdBy": "admin",
     "createdAt": "2025-06-11T12:54:08.098Z",
     "id": "108cfc48-9285-4165-8a51-5f82e602d6f6"
+  },
+  {
+    "message": "Minha família é o alicerce da minha vida, o porto seguro onde encontro conforto, alegria e o verdadeiro sentido de pertencer. É nela que os laços se entrelaçam em uma trama de amor, apoio e cumplicidade. Desde os momentos mais simples, como um jantar à mesa, até os desafios que a vida nos apresenta, sei que posso contar com o calor e a força da minha família. Ela é o meu refúgio, o lugar onde sou verdadeiramente eu, sem filtros ou receios, e onde cada dia é uma oportunidade de construir memórias preciosas que levarei para sempre no coração.",
+    "musicUrl": "https://www.youtube.com/watch?v=JqIHlDVqUTw",
+    "photos": [
+      "/api/photos/6a930a2a-144e-4465-99d6-b6024b0e5758-1000041736.jpg",
+      "/api/photos/47eb0cd5-0641-4834-b8af-a72465a51400-ChatGPT Image 1 de abr. de 2025, 08_06_52.png"
+    ],
+    "backgroundPhotos": [
+      "/api/photos/58805098-7684-4f01-b28e-b34f4e0976bd-595891.jpg",
+      "/api/photos/569545c7-f1cd-46c7-b298-8909ac0d8311-613932.png",
+      "/api/photos/367d5d8f-6738-44a4-a18b-e3f14c852578-641999.jpg",
+      "/api/photos/a45605bd-8708-4223-b8c5-4705c6866139-706620.jpg"
+    ],
+    "createdBy": "admin",
+    "id": "286b0d55-7a03-4791-ad23-3887f6341627",
+    "createdAt": "2025-06-11T13:12:17.357Z"
+  },
+  {
+    "message": "Ter minha esposa como parte central da minha família é um presente inestimável. Ela não apenas enriquece a minha vida, mas também fortalece os laços que nos unem a todos. Sua dedicação, carinho e a forma como ela cuida de cada um de nós são admiráveis. Juntos, formamos uma família unida e feliz, onde o amor é a força motriz e onde cada novo dia é uma celebração da vida que construímos lado a lado. Sou imensamente abençoado por ter uma mulher tão extraordinária ao meu lado, e por saber que, com ela, o futuro será sempre um lugar de infinitas possibilidades.",
+    "musicUrl": "https://www.youtube.com/watch?v=JqIHlDVqUTw",
+    "photos": [
+      "/api/photos/2ebd8593-29ef-4027-b34a-a6aea28b83c7-1000041736.jpg",
+      "/api/photos/d798575d-0be0-4e4e-9461-e2fc4f308cea-ChatGPT Image 1 de abr. de 2025, 08_06_52.png"
+    ],
+    "backgroundPhotos": [
+      "/api/photos/9f7cdbd8-d454-4aab-b14a-77ec265e6a2a-452094.jpg",
+      "/api/photos/20c154e8-df9c-447f-8a10-3a0c27f94856-548142.jpg",
+      "/api/photos/ceb94733-488f-468b-a67e-ea5b71517f76-641999.jpg",
+      "/api/photos/047acd8e-4e52-40db-9faa-ab1060704740-710944.jpg",
+      "/api/photos/caeac59b-baa8-4242-84bb-111459c8318e-883945.jpg"
+    ],
+    "createdBy": "admin",
+    "id": "7a125599-991c-48be-8f5d-2ea8781011b8",
+    "createdAt": "2025-06-11T13:19:36.262Z"
+  },
+  {
+    "message": "Dentro desse universo familiar, minha esposa ocupa um lugar de destaque, sendo a estrela que ilumina meus dias. Ela é a minha parceira de vida, minha confidente e a pessoa que me inspira a ser alguém melhor a cada amanhecer. Sua presença transformou completamente a minha jornada, trazendo uma dimensão de felicidade e plenitude que eu jamais imaginei ser possível. Com ela, cada obstáculo se torna menor, cada vitória é celebrada em dobro e cada instante se reveste de um significado especial.",
+    "musicUrl": "https://www.youtube.com/watch?v=JqIHlDVqUTw",
+    "photos": [
+      "/api/photos/26bdfd67-2137-4675-9f02-8591ba568250-1000041736.jpg",
+      "/api/photos/f1ccac17-0e36-4281-8b64-65c9e7c96f00-ChatGPT Image 1 de abr. de 2025, 08_06_52.png"
+    ],
+    "backgroundPhotos": [
+      "/api/photos/02d77df6-c0f7-4084-ac3b-b680d6d6596a-388074.jpg",
+      "/api/photos/0c5eac68-d534-44b9-be61-67be03c5a57a-398952.jpg",
+      "/api/photos/cc599c15-2651-4501-84d8-416f542a74de-464814.jpg",
+      "/api/photos/a5f3e433-92c9-47a9-83cf-c37335d160e9-476404.jpg"
+    ],
+    "createdBy": "admin",
+    "id": "cded75d5-fef5-48e5-868d-f31e8b545e84",
+    "createdAt": "2025-06-11T13:31:25.905Z"
   }
 ]

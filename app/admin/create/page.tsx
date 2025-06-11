@@ -42,7 +42,7 @@ export default function CreateExperiencePage() {
       const formData = new FormData();
       formData.append('message', message);
       formData.append('musicUrl', musicUrl);
-      formData.append('createdBy', 'admin'); // Hardcoded for simplicity
+      formData.append('createdBy', 'admin');
 
       photos.forEach((photo) => {
         formData.append('photos', photo);
@@ -58,7 +58,8 @@ export default function CreateExperiencePage() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create experience');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to create experience');
       }
 
       const data = await response.json();
@@ -77,6 +78,8 @@ export default function CreateExperiencePage() {
     router.push('/admin/login');
   };
 
+  const MAX_MESSAGE_LENGTH = 600;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 p-4 flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
@@ -90,8 +93,12 @@ export default function CreateExperiencePage() {
               onChange={(e) => setMessage(e.target.value)}
               rows={4}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+              maxLength={MAX_MESSAGE_LENGTH}
               required
             ></textarea>
+            <p className="text-xs text-gray-500 mt-1 text-right">
+              {message.length} / {MAX_MESSAGE_LENGTH} characters
+            </p>
           </div>
 
           <div>

@@ -45,7 +45,7 @@ function initializeDataDirectory() {
 }
 
 // Main functions
-export async function createExperience(experience: Omit<Experience, 'id'>): Promise<string> {
+export async function createExperience(experience: Omit<Experience, 'id' | 'createdAt'>): Promise<string> {
   initializeDataDirectory(); // Ensure initialization on first call
   const experiences = readExperiences();
   const id = uuidv4();
