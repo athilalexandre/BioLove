@@ -150,5 +150,23 @@
     "createdBy": "admin",
     "id": "cded75d5-fef5-48e5-868d-f31e8b545e84",
     "createdAt": "2025-06-11T13:31:25.905Z"
+  },
+  {
+    "message": "Dentro desse universo familiar, minha esposa ocupa um lugar de destaque, sendo a estrela que ilumina meus dias. Ela é a minha parceira de vida, minha confidente e a pessoa que me inspira a ser alguém melhor a cada amanhecer. Sua presença transformou completamente a minha jornada, trazendo uma dimensão de felicidade e plenitude que eu jamais imaginei ser possível. Com ela, cada obstáculo se torna menor, cada vitória é celebrada em dobro e cada instante se reveste de um significado especial.",
+    "title": "Minha vida, meu sonho",
+    "musicUrl": "https://www.youtube.com/watch?v=JqIHlDVqUTw",
+    "photos": [
+      "/api/photos/a060cab5-1a5f-4f9f-b60a-268eb0cac986-1000041736.jpg",
+      "/api/photos/1df3c782-81c9-48f9-896a-c787008ef3d1-ChatGPT Image 1 de abr. de 2025, 08_06_52.png"
+    ],
+    "backgroundPhotos": [
+      "/api/photos/8d620ad6-369d-4835-a5f2-f983b4e04614-333143.png",
+      "/api/photos/e7a96737-8a49-4121-916f-9bba79c811b1-388074.jpg",
+      "/api/photos/975e0fc3-53ca-4185-a86c-5bc5e939c0f0-398952.jpg",
+      "/api/photos/ad8ee4f8-4b9e-4663-823c-ee2eb335d3db-426259.jpg"
+    ],
+    "createdBy": "admin",
+    "id": "d0a70e4a-cc05-431d-8591-b0baabb6e557",
+    "createdAt": "2025-06-11T14:07:59.614Z"
   }
 ]

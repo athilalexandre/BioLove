@@ -6,6 +6,7 @@ import { useDropzone } from 'react-dropzone';
 
 export default function CreateExperiencePage() {
   const [message, setMessage] = useState('');
+  const [title, setTitle] = useState('');
   const [musicUrl, setMusicUrl] = useState('');
   const [photos, setPhotos] = useState<File[]>([]);
   const [backgroundPhotos, setBackgroundPhotos] = useState<File[]>([]);
@@ -41,6 +42,7 @@ export default function CreateExperiencePage() {
     try {
       const formData = new FormData();
       formData.append('message', message);
+      formData.append('title', title);
       formData.append('musicUrl', musicUrl);
       formData.append('createdBy', 'admin');
 
@@ -99,6 +101,19 @@ export default function CreateExperiencePage() {
             <p className="text-xs text-gray-500 mt-1 text-right">
               {message.length} / {MAX_MESSAGE_LENGTH} characters
             </p>
+          </div>
+
+          <div>
+            <label htmlFor="title" className="block text-sm font-medium text-gray-700">Title</label>
+            <input
+              type="text"
+              id="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+              placeholder="Enter a title for the experience"
+              required
+            />
           </div>
 
           <div>

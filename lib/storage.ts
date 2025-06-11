@@ -20,6 +20,7 @@ export interface Experience {
   backgroundPhotos?: string[];
   createdAt: string;
   createdBy: string;
+  title: string;
 }
 
 // Helper functions

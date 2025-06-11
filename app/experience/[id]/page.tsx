@@ -30,6 +30,7 @@ export default function ExperiencePage() {
   const id = params?.id as string;
   const [sentences, setSentences] = useState<string[]>([]);
   const [currentSentenceIndex, setCurrentSentenceIndex] = useState(0);
+  const SENTENCE_DURATION_MS = 5000; // 5 seconds
 
   // Helper function to split message into sentences
   const splitIntoSentences = (text: string): string[] => {
@@ -71,12 +72,8 @@ export default function ExperiencePage() {
 
     if (sentenceElements.length === 0) return;
 
-    const totalTextHeight = container.scrollHeight;
-    const visibleHeight = container.clientHeight;
-    const scrollableHeight = totalTextHeight - visibleHeight;
-
-    const totalAnimationDuration = musicDuration * 1000; // Convert to milliseconds
-    const durationPerSentence = totalAnimationDuration / sentences.length;
+    // No longer calculating based on total duration, fixed 5 seconds per sentence
+    const durationPerSentence = SENTENCE_DURATION_MS; 
 
     let startTime: DOMHighResTimeStamp | null = null;
     let animationFrameId: number;
@@ -88,15 +85,13 @@ export default function ExperiencePage() {
         currentSentenceEndTime = startTime + durationPerSentence; // Set end time for the first sentence
       }
 
-      const elapsedTime = currentTime - startTime;
-
       // Check if it's time to move to the next sentence
       if (currentTime >= currentSentenceEndTime) {
         setCurrentSentenceIndex(prevIndex => {
           const nextIndex = (prevIndex + 1) % sentences.length;
           if (nextIndex === 0 && playerRef.current) {
             // Loop back to start if needed, and reset player if it's a full loop
-            // playerRef.current.seekTo(0); // This might cause issues, better let player handle loop
+            playerRef.current.seekTo(0); // Seek player to start if looping back to first sentence
           }
           currentSentenceEndTime = currentTime + durationPerSentence; // Set end time for the next sentence
           return nextIndex;
@@ -110,10 +105,10 @@ export default function ExperiencePage() {
         const sentenceBottom = sentenceTop + currentSentenceElement.clientHeight;
         
         const currentScrollTop = container.scrollTop;
-        const currentScrollBottom = currentScrollTop + visibleHeight;
+        const currentScrollBottom = currentScrollTop + container.clientHeight;
 
         if (sentenceTop < currentScrollTop || sentenceBottom > currentScrollBottom) {
-          container.scrollTop = sentenceTop - (visibleHeight / 2) + (currentSentenceElement.clientHeight / 2); // Center the sentence
+          container.scrollTop = sentenceTop - (container.clientHeight / 2) + (currentSentenceElement.clientHeight / 2); // Center the sentence
         }
       }
 
@@ -123,7 +118,7 @@ export default function ExperiencePage() {
     animationFrameId = requestAnimationFrame(animateScroll);
 
     return () => cancelAnimationFrame(animationFrameId);
-  }, [sentences, musicDuration, isPlaying, currentSentenceIndex]);
+  }, [sentences, isPlaying, currentSentenceIndex]);
 
   useEffect(() => {
     if (experience?.photos && experience.photos.length > 1) {
@@ -222,14 +217,28 @@ export default function ExperiencePage() {
             }}
             ref={messageRef}
           >
-            {sentences.map((sentence, index) => (
-              <p 
-                key={index} 
-                className={`text-2xl md:text-3xl font-sans leading-loose text-gray-200 text-center transition-opacity duration-500 ${index === currentSentenceIndex ? 'opacity-100 font-bold' : 'opacity-40'}`}
-              >
-                {sentence.trim()}
-              </p>
-            ))}
+            {sentences.map((sentence, index) => {
+              const distance = Math.abs(index - currentSentenceIndex);
+              const blurAmount = distance * 2; // Adjust multiplier for desired blur intensity
+              const opacityAmount = 1 - (distance * 0.2); // Adjust multiplier for desired opacity fade
+
+              return (
+                <p 
+                  key={index} 
+                  className={`text-2xl md:text-3xl font-sans leading-loose text-gray-200 text-center transition-all duration-500`}
+                  style={{ 
+                    filter: `blur(${blurAmount}px)`,
+                    opacity: opacityAmount > 0 ? opacityAmount : 0.05, // Ensure minimum opacity for very distant sentences
+                    // Apply bold only to the current sentence
+                    fontWeight: index === currentSentenceIndex ? 'bold' : 'normal',
+                    // Increase font size slightly for the current sentence for better focus
+                    fontSize: index === currentSentenceIndex ? '2.5rem' : 'inherit', // Adjust size as needed
+                  }}
+                >
+                  {sentence.trim()}
+                </p>
+              );
+            })}
           </motion.div>
         </div>
       </div>
