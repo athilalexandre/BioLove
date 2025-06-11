@@ -142,7 +142,7 @@ export default function ExperiencePage() {
         </div>
       )}
 
-      <div className="relative z-10 min-h-screen flex flex-col lg:flex-row items-center lg:items-start justify-center p-4 lg:p-8 space-y-8 lg:space-y-0 lg:space-x-8 max-w-6xl mx-auto w-full">
+      <div className="relative z-10 min-h-screen flex flex-col lg:flex-row items-center lg:items-start justify-center p-4 lg:p-8 space-y-8 lg:space-y-0 lg:space-x-12 max-w-7xl mx-auto w-full">
         <div className="w-full lg:w-1/2 flex justify-center">
           {photos.length > 0 && (
             <AnimatePresence mode="wait">
@@ -150,8 +150,8 @@ export default function ExperiencePage() {
                 key={currentPhotoIndex}
                 src={photos[currentPhotoIndex]}
                 alt="Experience Photo"
-                className="rounded-lg shadow-2xl w-full max-w-sm lg:max-w-md h-auto object-contain"
-                style={{ border: '4px solid var(--photo-border-color, #f0abfc)' }}
+                className="rounded-xl shadow-2xl w-full max-w-md lg:max-w-lg h-auto object-contain transition-all duration-300 ease-in-out"
+                style={{ border: '8px solid var(--photo-border-color, #f0abfc)' }}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
@@ -166,10 +166,10 @@ export default function ExperiencePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5 }}
-            className="message-scroll-container max-w-2xl text-center lg:text-left text-white px-6 py-8 rounded-lg bg-black bg-opacity-80 shadow-lg relative"
-            style={{ maxHeight: 'min(100vh - 200px, 450px)' }}
+            className="message-scroll-container max-w-2xl text-center lg:text-left text-white px-6 py-8 rounded-xl bg-black bg-opacity-80 shadow-lg relative leading-relaxed tracking-wide"
+            style={{ maxHeight: 'min(100vh - 200px, 500px)' }}
           >
-            <p ref={messageRef} className="text-lg md:text-xl font-serif leading-relaxed whitespace-pre-wrap tracking-wide drop-shadow-lg">
+            <p ref={messageRef} className="text-xl md:text-2xl font-serif leading-relaxed whitespace-pre-wrap drop-shadow-md">
               {message}
             </p>
           </motion.div>
@@ -177,7 +177,7 @@ export default function ExperiencePage() {
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent via-black/70 z-20 flex flex-col items-center justify-center">
-        <div className="max-w-2xl mx-auto flex items-center space-x-4 p-3 rounded-full custom-player-bg shadow-lg">
+        <div className="max-w-xs mx-auto flex items-center space-x-4 p-3 rounded-full custom-player-bg shadow-lg">
           <ReactPlayer
             ref={playerRef}
             url={musicUrl}
@@ -185,7 +185,7 @@ export default function ExperiencePage() {
             height="0px"
             playing={isPlaying}
             muted={isMuted}
-            volume={volume}
+            volume={isMuted ? 0 : volume}
             onPlay={() => setIsPlaying(true)}
             onPause={() => setIsPlaying(false)}
             onEnded={() => setIsPlaying(false)}
@@ -200,7 +200,7 @@ export default function ExperiencePage() {
             onClick={() => setIsPlaying(!isPlaying)}
             className="text-white p-3 rounded-full custom-control-bg hover:scale-110 transition-transform focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
           >
-            {isPlaying ? <FaPause size={24} /> : <FaPlay size={24} />}
+            {isPlaying ? <FaPause size={28} /> : <FaPlay size={28} />}
           </button>
 
           <input
@@ -210,14 +210,14 @@ export default function ExperiencePage() {
             step="0.01"
             value={isMuted ? 0 : volume}
             onChange={handleVolumeChange}
-            className="w-24 md:w-32 h-2 rounded-lg appearance-none cursor-pointer range-lg bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 volume-slider"
+            className="w-full h-2 rounded-lg appearance-none cursor-pointer range-lg bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 volume-slider"
           />
 
           <button
             onClick={() => setIsMuted(!isMuted)}
             className="text-white p-3 rounded-full custom-control-bg hover:scale-110 transition-transform focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
           >
-            {isMuted || volume === 0 ? <FaVolumeMute size={24} /> : <FaVolumeUp size={24} />}
+            {isMuted || volume === 0 ? <FaVolumeMute size={28} /> : <FaVolumeUp size={28} />}
           </button>
         </div>
       </div>
