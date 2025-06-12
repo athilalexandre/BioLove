@@ -4,6 +4,47 @@ import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useDropzone } from 'react-dropzone';
 
+const layoutConfigs = {
+  default: {
+    name: "Default Layout",
+    description: "Um layout padrão que exibe uma foto principal em destaque e a mensagem abaixo, com fotos de fundo sutis.",
+    usesMainPhotos: true,
+    usesBackgroundPhotos: true,
+  },
+  full_screen_photo: {
+    name: "Full Screen Photo Layout",
+    description: "Exibe uma única foto em tela cheia como plano de fundo, com o texto sobreposto e elegante. Não utiliza fotos de fundo adicionais.",
+    usesMainPhotos: true,
+    usesBackgroundPhotos: false,
+  },
+  centered_message: {
+    name: "Centered Message Layout",
+    description: "Foca a mensagem e um carrossel de fotos menores e giratórias no centro, com fotos de fundo em movimento suave. Ideal para um foco central.",
+    usesMainPhotos: true,
+    usesBackgroundPhotos: true,
+  },
+  split_screen: {
+    name: "Split Screen Layout",
+    description: "Divide a tela horizontalmente para exibir fotos de um lado e a mensagem do outro, criando uma interação dinâmica e moderna.",
+    usesMainPhotos: true,
+    usesBackgroundPhotos: true,
+  },
+  vertical_timeline: {
+    name: "Vertical Timeline Layout",
+    description: "Organiza fotos e trechos de mensagem em uma linha do tempo vertical, perfeito para narrativas sequenciais ou histórias progressivas.",
+    usesMainPhotos: true, // Photos are tied to sentences
+    usesBackgroundPhotos: true,
+  },
+  photo_grid_message: {
+    name: "Photo Grid Message Layout",
+    description: "Apresenta uma grade dinâmica de fotos que se movem, com a mensagem integrada ou em destaque abaixo da grade. Ótimo para múltiplos momentos.",
+    usesMainPhotos: true,
+    usesBackgroundPhotos: true,
+  },
+};
+
+type LayoutKeys = keyof typeof layoutConfigs;
+
 export default function CreateExperiencePage() {
   const [message, setMessage] = useState('');
   const [title, setTitle] = useState('');
@@ -12,7 +53,7 @@ export default function CreateExperiencePage() {
   const [backgroundPhotos, setBackgroundPhotos] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [layout, setLayout] = useState('default');
+  const [layout, setLayout] = useState<LayoutKeys>('default');
   const router = useRouter();
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -48,13 +89,18 @@ export default function CreateExperiencePage() {
       formData.append('createdBy', 'admin');
       formData.append('layout', layout);
 
-      photos.forEach((photo) => {
-        formData.append('photos', photo);
-      });
+      // Only append photos if the current layout uses them
+      if (layoutConfigs[layout].usesMainPhotos) {
+        photos.forEach((photo) => {
+          formData.append('photos', photo);
+        });
+      }
 
-      backgroundPhotos.forEach((photo) => {
-        formData.append('backgroundPhotos', photo);
-      });
+      if (layoutConfigs[layout].usesBackgroundPhotos) {
+        backgroundPhotos.forEach((photo) => {
+          formData.append('backgroundPhotos', photo);
+        });
+      }
 
       const response = await fetch('/api/experiences', {
         method: 'POST',
@@ -83,12 +129,13 @@ export default function CreateExperiencePage() {
   };
 
   const MAX_MESSAGE_LENGTH = 600;
+  const currentLayoutConfig = layoutConfigs[layout];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 p-4 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
-        <h1 className="text-3xl font-bold text-center text-primary-800 mb-6">Create New Experience</h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="h-screen bg-gradient-to-br from-primary-50 to-primary-100 flex flex-col items-center justify-center p-4 overflow-hidden">
+      <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md h-full flex flex-col overflow-y-auto">
+        <h1 className="text-3xl font-bold text-center text-primary-800 mb-6 flex-shrink-0">Create New Experience</h1>
+        <form onSubmit={handleSubmit} className="space-y-4 flex-grow flex flex-col">
           <div>
             <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message for Partner</label>
             <textarea
@@ -136,66 +183,70 @@ export default function CreateExperiencePage() {
             <select
               id="layout"
               value={layout}
-              onChange={(e) => setLayout(e.target.value)}
+              onChange={(e) => setLayout(e.target.value as LayoutKeys)}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
               required
             >
-              <option value="default">Default Layout</option>
-              <option value="full_screen_photo">Full Screen Photo Layout</option>
-              <option value="centered_message">Centered Message Layout</option>
-              <option value="split_screen">Split Screen Layout</option>
-              <option value="vertical_timeline">Vertical Timeline Layout</option>
-              <option value="photo_grid_message">Photo Grid Message Layout</option>
+              {Object.entries(layoutConfigs).map(([key, config]) => (
+                <option key={key} value={key}>{config.name}</option>
+              ))}
             </select>
+            {currentLayoutConfig && (
+              <p className="text-xs text-gray-500 mt-1">{currentLayoutConfig.description}</p>
+            )}
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Photos (Main)</label>
-            <div
-              {...getRootProps()}
-              className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md cursor-pointer"
-            >
-              <input {...getInputProps()} />
-              {isDragActive ? (
-                <p className="text-primary-600">Drop the files here ...</p>
-              ) : (
-                <p className="text-center text-gray-500">
-                  Drag 'n' drop some files here, or click to select files
-                </p>
-              )}
+          {currentLayoutConfig?.usesMainPhotos && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Photos (Main)</label>
+              <div
+                {...getRootProps()}
+                className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md cursor-pointer"
+              >
+                <input {...getInputProps()} />
+                {isDragActive ? (
+                  <p className="text-primary-600">Drop the files here ...</p>
+                ) : (
+                  <p className="text-center text-gray-500">
+                    Drag 'n' drop some files here, or click to select files
+                  </p>
+                )}
+              </div>
+              <aside className="mt-2 text-sm text-gray-600">
+                {photos.length > 0 ? (
+                  <p>{photos.length} file(s) selected</p>
+                ) : (
+                  <p>No files selected.</p>
+                )}
+              </aside>
             </div>
-            <aside className="mt-2 text-sm text-gray-600">
-              {photos.length > 0 ? (
-                <p>{photos.length} file(s) selected</p>
-              ) : (
-                <p>No files selected.</p>
-              )}
-            </aside>
-          </div>
+          )}
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Photos (Background)</label>
-            <div
-              {...getBackgroundRootProps()}
-              className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md cursor-pointer"
-            >
-              <input {...getBackgroundInputProps()} />
-              {isBackgroundDragActive ? (
-                <p className="text-primary-600">Drop the files here ...</p>
-              ) : (
-                <p className="text-center text-gray-500">
-                  Drag 'n' drop some files here, or click to select files
-                </p>
-              )}
+          {currentLayoutConfig?.usesBackgroundPhotos && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Photos (Background)</label>
+              <div
+                {...getBackgroundRootProps()}
+                className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md cursor-pointer"
+              >
+                <input {...getBackgroundInputProps()} />
+                {isBackgroundDragActive ? (
+                  <p className="text-primary-600">Drop the files here ...</p>
+                ) : (
+                  <p className="text-center text-gray-500">
+                    Drag 'n' drop some files here, or click to select files
+                  </p>
+                )}
+              </div>
+              <aside className="mt-2 text-sm text-gray-600">
+                {backgroundPhotos.length > 0 ? (
+                  <p>{backgroundPhotos.length} file(s) selected</p>
+                ) : (
+                  <p>No files selected.</p>
+                )}
+              </aside>
             </div>
-            <aside className="mt-2 text-sm text-gray-600">
-              {backgroundPhotos.length > 0 ? (
-                <p>{backgroundPhotos.length} file(s) selected</p>
-              ) : (
-                <p>No files selected.</p>
-              )}
-            </aside>
-          </div>
+          )}
 
           {error && (
             <p className="text-red-600 text-sm text-center">{error}</p>
@@ -203,14 +254,14 @@ export default function CreateExperiencePage() {
 
           <button
             type="submit"
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 flex-shrink-0"
             disabled={loading}
           >
             {loading ? 'Creating...' : 'Create Experience'}
           </button>
         </form>
 
-        <div className="mt-6">
+        <div className="mt-6 flex-shrink-0">
           <button
             onClick={handleLogout}
             className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-primary-700 bg-primary-100 hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
