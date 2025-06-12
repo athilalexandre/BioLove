@@ -5,6 +5,8 @@ import { useParams } from 'next/navigation';
 import ReactPlayer from 'react-player';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from 'react-icons/fa';
+import html2canvas from 'html2canvas';
+import RecordRTC from 'recordrtc';
 
 export interface Experience {
   id: string;
@@ -35,6 +37,10 @@ export default function ExperiencePage() {
   const [sentences, setSentences] = useState<string[]>([]);
   const [currentSentenceIndex, setCurrentSentenceIndex] = useState(0);
   const SENTENCE_DURATION_MS = 5000; // 5 seconds
+  const [isRecording, setIsRecording] = useState(false);
+  const [isGeneratingVideo, setIsGeneratingVideo] = useState(false);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const recordedChunksRef = useRef<Blob[]>([]);
 
   // Helper function to split message into sentences
   const splitIntoSentences = (text: string): string[] => {
@@ -53,6 +59,20 @@ export default function ExperiencePage() {
             throw new Error('Failed to fetch experience');
           }
           const data: Experience = await response.json();
+          
+          // Convert Spotify URL to YouTube URL if needed via API
+          if (data.musicUrl.includes('spotify.com')) {
+            const convertResponse = await fetch(`/api/convert-music?spotifyUrl=${encodeURIComponent(data.musicUrl)}`);
+            if (convertResponse.ok) {
+              const convertedData = await convertResponse.json();
+              data.musicUrl = convertedData.youtubeUrl;
+            } else {
+              console.error('Failed to convert Spotify URL via API');
+              // Fallback to a default YouTube music video if conversion fails
+              data.musicUrl = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+            }
+          }
+          
           setExperience(data);
         } catch (error) {
           console.error("Error fetching experience:", error);
@@ -167,6 +187,50 @@ export default function ExperiencePage() {
     const progress = x / width;
     if (playerRef.current) {
       playerRef.current.getInternalPlayer().currentTime = progress * musicDuration;
+    }
+  };
+
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getDisplayMedia({
+        video: true,
+        audio: true
+      });
+
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      recordedChunksRef.current = [];
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          recordedChunksRef.current.push(event.data);
+        }
+      };
+
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(recordedChunksRef.current, {
+          type: 'video/webm'
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `experience-${id}.webm`;
+        a.click();
+        URL.revokeObjectURL(url);
+        setIsRecording(false);
+      };
+
+      mediaRecorder.start();
+      setIsRecording(true);
+    } catch (error) {
+      console.error('Error starting recording:', error);
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop();
+      mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
     }
   };
 
@@ -288,7 +352,7 @@ export default function ExperiencePage() {
             config={{
               youtube: { playerVars: { autoplay: 1 } },
               vimeo: { playerOptions: { autoplay: true } },
-              soundcloud: { options: { auto_play: true } },
+              soundcloud: { options: { auto_play: true } }
             }}
           />
           <button
@@ -331,6 +395,15 @@ export default function ExperiencePage() {
             />
           </div>
         </div>
+      </div>
+
+      <div className="fixed bottom-4 right-4 z-50 flex gap-2">
+        <button
+          onClick={isRecording ? stopRecording : startRecording}
+          className="px-4 py-2 bg-primary-600 hover:bg-primary-700 rounded-md text-white"
+        >
+          {isRecording ? 'Stop Recording' : 'Record Experience'}
+        </button>
       </div>
 
       <style jsx global>{`
