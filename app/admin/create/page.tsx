@@ -10,42 +10,70 @@ const layoutConfigs = {
     description: "Por favor, selecione um layout para ver as opções de upload de fotos.",
     usesMainPhotos: false,
     usesBackgroundPhotos: false,
+    minMainPhotos: 0,
+    maxMainPhotos: 0,
+    minBackgroundPhotos: 0,
+    maxBackgroundPhotos: 0,
   },
   default: {
     name: "Default Layout",
     description: "Um layout padrão que exibe uma foto principal em destaque e a mensagem abaixo, com fotos de fundo sutis.",
     usesMainPhotos: true,
     usesBackgroundPhotos: true,
+    minMainPhotos: 1,
+    maxMainPhotos: 10,
+    minBackgroundPhotos: 1,
+    maxBackgroundPhotos: 10,
   },
   full_screen_photo: {
     name: "Full Screen Photo Layout",
     description: "Exibe uma única foto em tela cheia como plano de fundo, com o texto sobreposto e elegante. Não utiliza fotos de fundo adicionais.",
     usesMainPhotos: true,
     usesBackgroundPhotos: false,
+    minMainPhotos: 1,
+    maxMainPhotos: 1,
+    minBackgroundPhotos: 0,
+    maxBackgroundPhotos: 0,
   },
   centered_message: {
     name: "Centered Message Layout",
     description: "Foca a mensagem e um carrossel de fotos menores e giratórias no centro, com fotos de fundo em movimento suave. Ideal para um foco central.",
     usesMainPhotos: true,
     usesBackgroundPhotos: true,
+    minMainPhotos: 1,
+    maxMainPhotos: 5,
+    minBackgroundPhotos: 1,
+    maxBackgroundPhotos: 10,
   },
   split_screen: {
     name: "Split Screen Layout",
     description: "Divide a tela horizontalmente para exibir fotos de um lado e a mensagem do outro, criando uma interação dinâmica e moderna.",
     usesMainPhotos: true,
     usesBackgroundPhotos: true,
+    minMainPhotos: 1,
+    maxMainPhotos: 10,
+    minBackgroundPhotos: 1,
+    maxBackgroundPhotos: 10,
   },
   vertical_timeline: {
     name: "Vertical Timeline Layout",
     description: "Organiza fotos e trechos de mensagem em uma linha do tempo vertical, perfeito para narrativas sequenciais ou histórias progressivas.",
     usesMainPhotos: true, // Photos are tied to sentences
     usesBackgroundPhotos: true,
+    minMainPhotos: 1,
+    maxMainPhotos: 20, // Allowing up to 20 for more flexibility
+    minBackgroundPhotos: 1,
+    maxBackgroundPhotos: 10,
   },
   photo_grid_message: {
     name: "Photo Grid Message Layout",
     description: "Apresenta uma grade dinâmica de fotos que se movem, com a mensagem integrada ou em destaque abaixo da grade. Ótimo para múltiplos momentos.",
     usesMainPhotos: true,
     usesBackgroundPhotos: true,
+    minMainPhotos: 3,
+    maxMainPhotos: 9, // Max 9 photos for the grid as per component
+    minBackgroundPhotos: 1,
+    maxBackgroundPhotos: 10,
   },
 };
 
@@ -86,6 +114,34 @@ export default function CreateExperiencePage() {
     e.preventDefault();
     setLoading(true);
     setError(null);
+
+    const currentLayoutConfig = layoutConfigs[layout];
+
+    // Validate main photos
+    if (currentLayoutConfig.usesMainPhotos) {
+      if (photos.length < currentLayoutConfig.minMainPhotos || photos.length > currentLayoutConfig.maxMainPhotos) {
+        setError(`Para o layout '${currentLayoutConfig.name}', você deve fazer upload de ${currentLayoutConfig.minMainPhotos} a ${currentLayoutConfig.maxMainPhotos} fotos principais.`);
+        setLoading(false);
+        return;
+      }
+    } else if (photos.length > 0) {
+      setError(`O layout '${currentLayoutConfig.name}' não utiliza fotos principais.`);
+      setLoading(false);
+      return;
+    }
+
+    // Validate background photos
+    if (currentLayoutConfig.usesBackgroundPhotos) {
+      if (backgroundPhotos.length < currentLayoutConfig.minBackgroundPhotos || backgroundPhotos.length > currentLayoutConfig.maxBackgroundPhotos) {
+        setError(`Para o layout '${currentLayoutConfig.name}', você deve fazer upload de ${currentLayoutConfig.minBackgroundPhotos} a ${currentLayoutConfig.maxBackgroundPhotos} fotos de fundo.`);
+        setLoading(false);
+        return;
+      }
+    } else if (backgroundPhotos.length > 0) {
+      setError(`O layout '${currentLayoutConfig.name}' não utiliza fotos de fundo.`);
+      setLoading(false);
+      return;
+    }
 
     try {
       const formData = new FormData();
@@ -137,11 +193,44 @@ export default function CreateExperiencePage() {
   const MAX_MESSAGE_LENGTH = 600;
   const currentLayoutConfig = layoutConfigs[layout];
 
+  const MAX_FILE_SIZE_MB = 5; // Example: 5MB
+  const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center p-4">
       <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md h-full flex flex-col overflow-y-auto">
         <h1 className="text-3xl font-bold text-center text-primary-800 mb-6 flex-shrink-0">Create New Experience</h1>
         <form onSubmit={handleSubmit} className="space-y-4 flex-grow flex flex-col">
+          {/* Title and Music URL */}
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1">
+              <label htmlFor="title" className="block text-sm font-medium text-gray-700">Title</label>
+              <input
+                type="text"
+                id="title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                placeholder="Enter a title for the experience"
+                required
+              />
+            </div>
+
+            <div className="flex-1">
+              <label htmlFor="musicUrl" className="block text-sm font-medium text-gray-700">Music URL (YouTube)</label>
+              <input
+                type="url"
+                id="musicUrl"
+                value={musicUrl}
+                onChange={(e) => setMusicUrl(e.target.value)}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                placeholder="e.g., https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                required
+              />
+            </div>
+          </div>
+
+          {/* Message */}
           <div>
             <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message for Partner</label>
             <textarea
@@ -158,32 +247,7 @@ export default function CreateExperiencePage() {
             </p>
           </div>
 
-          <div>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700">Title</label>
-            <input
-              type="text"
-              id="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-              placeholder="Enter a title for the experience"
-              required
-            />
-          </div>
-
-          <div>
-            <label htmlFor="musicUrl" className="block text-sm font-medium text-gray-700">Music URL (YouTube)</label>
-            <input
-              type="url"
-              id="musicUrl"
-              value={musicUrl}
-              onChange={(e) => setMusicUrl(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-              placeholder="e.g., https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-              required
-            />
-          </div>
-
+          {/* Choose Layout */}
           <div>
             <label htmlFor="layout" className="block text-sm font-medium text-gray-700">Choose Layout</label>
             <select
@@ -216,10 +280,11 @@ export default function CreateExperiencePage() {
                   >
                     <input {...getInputProps()} />
                     {isDragActive ? (
-                      <p className="text-primary-600">Drop the files here ...</p>
+                      <p className="text-primary-600">Solte os arquivos aqui ...</p>
                     ) : (
                       <p className="text-center text-gray-500">
-                        Drag 'n' drop some files here, or click to select files
+                        Arraste e solte arquivos aqui, ou clique para selecionar arquivos.<br />
+                        <span className="text-xs">Max: {MAX_FILE_SIZE_MB}MB por arquivo. Não há limite de dimensões de imagem.</span>
                       </p>
                     )}
                   </div>
@@ -242,10 +307,11 @@ export default function CreateExperiencePage() {
                   >
                     <input {...getBackgroundInputProps()} />
                     {isBackgroundDragActive ? (
-                      <p className="text-primary-600">Drop the files here ...</p>
+                      <p className="text-primary-600">Solte os arquivos aqui ...</p>
                     ) : (
                       <p className="text-center text-gray-500">
-                        Drag 'n' drop some files here, or click to select files
+                        Arraste e solte arquivos aqui, ou clique para selecionar arquivos.<br />
+                        <span className="text-xs">Max: {MAX_FILE_SIZE_MB}MB por arquivo. Não há limite de dimensões de imagem.</span>
                       </p>
                     )}
                   </div>
@@ -265,23 +331,23 @@ export default function CreateExperiencePage() {
             <p className="text-red-600 text-sm text-center">{error}</p>
           )}
 
-          <button
-            type="submit"
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 flex-shrink-0"
-            disabled={loading}
-          >
-            {loading ? 'Creating...' : 'Create Experience'}
-          </button>
+          {/* Action Buttons: Create Experience and Logout */}
+          <div className="flex flex-col md:flex-row gap-4 mt-auto pt-4">
+            <button
+              type="submit"
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 flex-1"
+              disabled={loading}
+            >
+              {loading ? 'Creating...' : 'Create Experience'}
+            </button>
+            <button
+              onClick={handleLogout}
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-primary-700 bg-primary-100 hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 flex-1"
+            >
+              Logout
+            </button>
+          </div>
         </form>
-
-        <div className="mt-6 flex-shrink-0">
-          <button
-            onClick={handleLogout}
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-primary-700 bg-primary-100 hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-          >
-            Logout
-          </button>
-        </div>
       </div>
     </div>
   );
