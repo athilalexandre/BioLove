@@ -1,6 +1,6 @@
-# BioLove - Personalized Couple Experiences
+# Memoriae - Personalized Digital Experiences
 
-A modern web platform for creating and sharing personalized couple experiences through beautiful, interactive landing pages.
+A modern web platform for creating and sharing personalized digital experiences through beautiful, interactive landing pages.
 
 ## Features
 
@@ -14,12 +14,12 @@ A modern web platform for creating and sharing personalized couple experiences t
 
 ## Layouts Available
 
-BioLove offers a variety of layouts to present your experience. Each layout has a unique visual style and optimal photo requirements:
+Memoriae offers a variety of layouts to present your experience. Each layout has a unique visual style and optimal photo requirements:
 
 -   **Default Layout**: A standard layout featuring a main photo in prominence and the message below, with subtle background photos. Requires 1-10 main photos and 1-10 background photos.
 -   **Full Screen Photo Layout**: Displays a single full-screen photo as the background, with elegant, overlaid text. Requires exactly 1 main photo (no additional background photos are used).
 -   **Centered Message Layout**: Focuses the message and a carousel of smaller, rotating photos in the center, with smoothly moving background photos. Ideal for a central focus. Requires 1-5 main photos and 1-10 background photos.
--   **Split Screen Layout**: Divides the screen horizontally to display photos on one side and the message on the other, creating a dynamic and modern interaction. Requires 1-10 main photos and 1-10 background photos.
+-   **Split Screen Layout**: Dividess the screen horizontally to display photos on one side and the message on the other, creating a dynamic and modern interaction. Requires 1-10 main photos and 1-10 background photos.
 -   **Vertical Timeline Layout**: Organizes photos and message snippets in a vertical timeline, perfect for sequential narratives or progressive stories. Requires 1-20 main photos (tied to sentences) and 1-10 background photos.
 -   **Photo Grid Message Layout**: Presents a dynamic grid of photos that animate, with the message integrated or highlighted below the grid. Great for showcasing multiple moments. Requires 3-9 main photos and 1-10 background photos.
 
@@ -46,8 +46,8 @@ When creating an experience, photo upload fields will dynamically appear based o
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/bio-love.git
-cd bio-love
+git clone https://github.com/yourusername/memoriae.git
+cd memoriae
 ```
 
 2. Install dependencies:
@@ -92,7 +92,7 @@ Admin login and password are managed directly through Firebase Authentication. T
 
 ### Experience Viewing
 
-1. Share the generated experience URL with the couple
+1. Share the generated experience URL
 2. The experience page will automatically play music and display photos with the custom message
 
 ## Development
