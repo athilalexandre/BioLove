@@ -8,10 +8,11 @@ export async function POST(req: NextRequest) {
     const title = formData.get('title') as string;
     const musicUrl = formData.get('musicUrl') as string;
     const createdBy = formData.get('createdBy') as string;
+    const layout = formData.get('layout') as string;
     const photos = formData.getAll('photos') as File[];
     const backgroundPhotos = formData.getAll('backgroundPhotos') as File[];
 
-    if (!message || !musicUrl || !createdBy || !title) {
+    if (!message || !musicUrl || !createdBy || !title || !layout) {
       return NextResponse.json({ message: 'Missing required fields' }, { status: 400 });
     }
 
@@ -42,6 +43,7 @@ export async function POST(req: NextRequest) {
       photos: photoUrls,
       backgroundPhotos: backgroundPhotoUrls,
       createdBy,
+      layout,
     });
 
     return NextResponse.json({ id: experienceId }, { status: 201 });

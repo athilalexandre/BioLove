@@ -21,6 +21,7 @@ export interface Experience {
   createdAt: string;
   createdBy: string;
   title: string;
+  layout: string;
 }
 
 // Helper functions

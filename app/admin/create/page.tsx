@@ -12,6 +12,7 @@ export default function CreateExperiencePage() {
   const [backgroundPhotos, setBackgroundPhotos] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [layout, setLayout] = useState('default');
   const router = useRouter();
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -45,6 +46,7 @@ export default function CreateExperiencePage() {
       formData.append('title', title);
       formData.append('musicUrl', musicUrl);
       formData.append('createdBy', 'admin');
+      formData.append('layout', layout);
 
       photos.forEach((photo) => {
         formData.append('photos', photo);
@@ -117,7 +119,7 @@ export default function CreateExperiencePage() {
           </div>
 
           <div>
-            <label htmlFor="musicUrl" className="block text-sm font-medium text-gray-700">Music URL (YouTube/Spotify)</label>
+            <label htmlFor="musicUrl" className="block text-sm font-medium text-gray-700">Music URL (YouTube)</label>
             <input
               type="url"
               id="musicUrl"
@@ -127,6 +129,24 @@ export default function CreateExperiencePage() {
               placeholder="e.g., https://www.youtube.com/watch?v=dQw4w9WgXcQ"
               required
             />
+          </div>
+
+          <div>
+            <label htmlFor="layout" className="block text-sm font-medium text-gray-700">Choose Layout</label>
+            <select
+              id="layout"
+              value={layout}
+              onChange={(e) => setLayout(e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+              required
+            >
+              <option value="default">Default Layout</option>
+              <option value="full_screen_photo">Full Screen Photo Layout</option>
+              <option value="centered_message">Centered Message Layout</option>
+              <option value="split_screen">Split Screen Layout</option>
+              <option value="vertical_timeline">Vertical Timeline Layout</option>
+              <option value="photo_grid_message">Photo Grid Message Layout</option>
+            </select>
           </div>
 
           <div>
