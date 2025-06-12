@@ -5,6 +5,12 @@ import { useRouter } from 'next/navigation';
 import { useDropzone } from 'react-dropzone';
 
 const layoutConfigs = {
+  empty_selection: {
+    name: "Selecione um Layout",
+    description: "Por favor, selecione um layout para ver as opções de upload de fotos.",
+    usesMainPhotos: false,
+    usesBackgroundPhotos: false,
+  },
   default: {
     name: "Default Layout",
     description: "Um layout padrão que exibe uma foto principal em destaque e a mensagem abaixo, com fotos de fundo sutis.",
@@ -53,7 +59,7 @@ export default function CreateExperiencePage() {
   const [backgroundPhotos, setBackgroundPhotos] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [layout, setLayout] = useState<LayoutKeys>('default');
+  const [layout, setLayout] = useState<LayoutKeys>('empty_selection');
   const router = useRouter();
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -132,7 +138,7 @@ export default function CreateExperiencePage() {
   const currentLayoutConfig = layoutConfigs[layout];
 
   return (
-    <div className="h-screen bg-gradient-to-br from-primary-50 to-primary-100 flex flex-col items-center justify-center p-4 overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center p-4">
       <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md h-full flex flex-col overflow-y-auto">
         <h1 className="text-3xl font-bold text-center text-primary-800 mb-6 flex-shrink-0">Create New Experience</h1>
         <form onSubmit={handleSubmit} className="space-y-4 flex-grow flex flex-col">
@@ -188,7 +194,9 @@ export default function CreateExperiencePage() {
               required
             >
               {Object.entries(layoutConfigs).map(([key, config]) => (
-                <option key={key} value={key}>{config.name}</option>
+                <option key={key} value={key} disabled={key === 'empty_selection' && layout !== 'empty_selection'}>
+                  {config.name}
+                </option>
               ))}
             </select>
             {currentLayoutConfig && (
