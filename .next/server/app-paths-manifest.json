@@ -1,8 +1,5 @@
 {
   "/admin/create/page": "app/admin/create/page.js",
-  "/api/experiences/route": "app/api/experiences/route.js",
-  "/page": "app/page.js",
   "/api/photos/[filename]/route": "app/api/photos/[filename]/route.js",
-  "/experience/[id]/page": "app/experience/[id]/page.js",
-  "/api/experiences/[id]/route": "app/api/experiences/[id]/route.js"
+  "/experience/[id]/page": "app/experience/[id]/page.js"
 }

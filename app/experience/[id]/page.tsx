@@ -84,16 +84,16 @@ function Default_Layout({
 // Full Screen Photo Layout Component
 function Full_Screen_Photo_Layout({
   photos,
-  message,
   sentences,
   currentSentenceIndex,
   title,
+  messageRef,
 }: {
   photos: string[];
-  message: string;
   sentences: string[];
   currentSentenceIndex: number;
   title: string;
+  messageRef: React.RefObject<HTMLDivElement>;
 }) {
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
 
@@ -131,7 +131,9 @@ function Full_Screen_Photo_Layout({
       {/* Overlay for text and title */}
       <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col items-center justify-end p-8 text-center">
         {/* Title is removed from here to avoid duplication */}
-        <div className="bg-white/10 backdrop-blur-md p-6 rounded-xl max-w-lg mb-20 shadow-lg border border-white/20">
+        <div 
+          ref={messageRef}
+          className="bg-white/10 backdrop-blur-md p-6 rounded-xl max-w-lg mb-20 shadow-lg border border-white/20 message-scroll-container max-h-60 overflow-y-auto custom-scrollbar">
           {sentences.map((sentence, index) => (
             <p
               key={index}
@@ -294,15 +296,17 @@ function Vertical_Timeline_Layout({
   sentences,
   currentSentenceIndex,
   title,
+  messageRef,
 }: {
   photos: string[];
   message: string;
   sentences: string[];
   currentSentenceIndex: number;
   title: string;
+  messageRef: React.RefObject<HTMLDivElement>;
 }) {
   return (
-    <div className="relative z-10 flex flex-col items-center justify-start h-full w-full p-8 overflow-y-auto custom-scrollbar">
+    <div ref={messageRef} className="relative z-10 flex flex-col items-center justify-start h-full w-full p-8 overflow-y-auto custom-scrollbar">
       <h1 className="text-5xl font-bold text-primary-400 mb-12 text-center drop-shadow-lg font-playfair">
         {title}
       </h1>
@@ -646,10 +650,10 @@ export default function ExperiencePage() {
       {layout === 'full_screen_photo' ? (
         <Full_Screen_Photo_Layout
           photos={photos}
-          message={message}
           sentences={sentences}
           currentSentenceIndex={currentSentenceIndex}
           title={title}
+          messageRef={messageRef}
         />
       ) : layout === 'centered_message' ? (
         <Centered_Message_Layout
@@ -675,6 +679,7 @@ export default function ExperiencePage() {
           sentences={sentences}
           currentSentenceIndex={currentSentenceIndex}
           title={title}
+          messageRef={messageRef}
         />
       ) : layout === 'photo_grid_message' ? (
         <Photo_Grid_Message_Layout
