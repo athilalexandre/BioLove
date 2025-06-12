@@ -204,55 +204,60 @@ export default function CreateExperiencePage() {
             )}
           </div>
 
-          {currentLayoutConfig?.usesMainPhotos && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Photos (Main)</label>
-              <div
-                {...getRootProps()}
-                className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md cursor-pointer"
-              >
-                <input {...getInputProps()} />
-                {isDragActive ? (
-                  <p className="text-primary-600">Drop the files here ...</p>
-                ) : (
-                  <p className="text-center text-gray-500">
-                    Drag 'n' drop some files here, or click to select files
-                  </p>
-                )}
-              </div>
-              <aside className="mt-2 text-sm text-gray-600">
-                {photos.length > 0 ? (
-                  <p>{photos.length} file(s) selected</p>
-                ) : (
-                  <p>No files selected.</p>
-                )}
-              </aside>
-            </div>
-          )}
+          {/* Photos Uploads Section */}
+          {(currentLayoutConfig?.usesMainPhotos || currentLayoutConfig?.usesBackgroundPhotos) && (
+            <div className="flex flex-col md:flex-row gap-4">
+              {currentLayoutConfig?.usesMainPhotos && (
+                <div className="flex-1">
+                  <label className="block text-sm font-medium text-gray-700">Photos (Main)</label>
+                  <div
+                    {...getRootProps()}
+                    className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md cursor-pointer"
+                  >
+                    <input {...getInputProps()} />
+                    {isDragActive ? (
+                      <p className="text-primary-600">Drop the files here ...</p>
+                    ) : (
+                      <p className="text-center text-gray-500">
+                        Drag 'n' drop some files here, or click to select files
+                      </p>
+                    )}
+                  </div>
+                  <aside className="mt-2 text-sm text-gray-600">
+                    {photos.length > 0 ? (
+                      <p>{photos.length} file(s) selected</p>
+                    ) : (
+                      <p>No files selected.</p>
+                    )}
+                  </aside>
+                </div>
+              )}
 
-          {currentLayoutConfig?.usesBackgroundPhotos && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Photos (Background)</label>
-              <div
-                {...getBackgroundRootProps()}
-                className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md cursor-pointer"
-              >
-                <input {...getBackgroundInputProps()} />
-                {isBackgroundDragActive ? (
-                  <p className="text-primary-600">Drop the files here ...</p>
-                ) : (
-                  <p className="text-center text-gray-500">
-                    Drag 'n' drop some files here, or click to select files
-                  </p>
-                )}
-              </div>
-              <aside className="mt-2 text-sm text-gray-600">
-                {backgroundPhotos.length > 0 ? (
-                  <p>{backgroundPhotos.length} file(s) selected</p>
-                ) : (
-                  <p>No files selected.</p>
-                )}
-              </aside>
+              {currentLayoutConfig?.usesBackgroundPhotos && (
+                <div className="flex-1">
+                  <label className="block text-sm font-medium text-gray-700">Photos (Background)</label>
+                  <div
+                    {...getBackgroundRootProps()}
+                    className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md cursor-pointer"
+                  >
+                    <input {...getBackgroundInputProps()} />
+                    {isBackgroundDragActive ? (
+                      <p className="text-primary-600">Drop the files here ...</p>
+                    ) : (
+                      <p className="text-center text-gray-500">
+                        Drag 'n' drop some files here, or click to select files
+                      </p>
+                    )}
+                  </div>
+                  <aside className="mt-2 text-sm text-gray-600">
+                    {backgroundPhotos.length > 0 ? (
+                      <p>{backgroundPhotos.length} file(s) selected</p>
+                    ) : (
+                      <p>No files selected.</p>
+                    )}
+                  </aside>
+                </div>
+              )}
             </div>
           )}
 
