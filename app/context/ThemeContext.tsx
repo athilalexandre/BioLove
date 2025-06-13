@@ -30,7 +30,7 @@ const defaultLightPalette: ColorPalette = {
   secondary: '#F0EEF5',
   accent: '#8A2BE2',
   neutral: '#D8D3E0',
-  background: '#f9a8d4',
+  background: '#F8F9FA',
   text: '#2D3748',
   inputBg: '#F7FAFC',
   inputBorder: '#E2E8F0',

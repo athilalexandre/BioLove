@@ -197,13 +197,13 @@ export default function CreateExperiencePage() {
   const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center p-4">
-      <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md h-full flex flex-col overflow-y-auto">
+    <div className="flex items-center justify-center">
+      <div className="bg-white p-4 rounded-lg shadow-xl w-full max-w-screen-md h-full flex flex-col overflow-y-auto overflow-x-hidden mx-auto">
         <h1 className="text-3xl font-bold text-center text-primary-800 mb-6 flex-shrink-0">Create New Experience</h1>
-        <form onSubmit={handleSubmit} className="space-y-4 flex-grow flex flex-col">
+        <form onSubmit={handleSubmit} className="space-y-4 flex-grow flex flex-col overflow-x-hidden">
           {/* Title and Music URL */}
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1">
+          <div className="flex flex-col space-y-4 flex-shrink-0">
+            <div className="flex-1 min-w-0">
               <label htmlFor="title" className="block text-sm font-medium text-gray-700">Title</label>
               <input
                 type="text"
@@ -216,7 +216,7 @@ export default function CreateExperiencePage() {
               />
             </div>
 
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               <label htmlFor="musicUrl" className="block text-sm font-medium text-gray-700">Music URL (YouTube)</label>
               <input
                 type="url"
@@ -224,14 +224,14 @@ export default function CreateExperiencePage() {
                 value={musicUrl}
                 onChange={(e) => setMusicUrl(e.target.value)}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                placeholder="e.g., https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                placeholder="Enter YouTube URL"
                 required
               />
             </div>
           </div>
 
           {/* Message */}
-          <div>
+          <div className="flex-shrink-0">
             <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message for Partner</label>
             <textarea
               id="message"
@@ -248,7 +248,7 @@ export default function CreateExperiencePage() {
           </div>
 
           {/* Choose Layout */}
-          <div>
+          <div className="flex-shrink-0">
             <label htmlFor="layout" className="block text-sm font-medium text-gray-700">Choose Layout</label>
             <select
               id="layout"
@@ -270,19 +270,19 @@ export default function CreateExperiencePage() {
 
           {/* Photos Uploads Section */}
           {(currentLayoutConfig?.usesMainPhotos || currentLayoutConfig?.usesBackgroundPhotos) && (
-            <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex flex-col flex-shrink-0">
               {currentLayoutConfig?.usesMainPhotos && (
-                <div className="flex-1">
+                <div className="flex-1 flex-shrink-0">
                   <label className="block text-sm font-medium text-gray-700">Photos (Main)</label>
                   <div
                     {...getRootProps()}
-                    className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md cursor-pointer"
+                    className="mt-1 flex justify-center p-4 border-2 border-gray-300 border-dashed rounded-md cursor-pointer"
                   >
                     <input {...getInputProps()} />
                     {isDragActive ? (
                       <p className="text-primary-600 text-xs font-bold">Solte os arquivos aqui ...</p>
                     ) : (
-                      <p className="text-center text-gray-500 text-xs">
+                      <p className="text-center text-gray-500 text-xs" style={{ wordBreak: 'break-word' }}>
                         <span className="font-bold">Arraste e solte arquivos aqui, ou clique para selecionar arquivos.</span><br /><br />
                         <span className="text-xs">Max: {MAX_FILE_SIZE_MB}MB por arquivo. Não há limite de dimensões de imagem.</span>
                       </p>
@@ -299,17 +299,17 @@ export default function CreateExperiencePage() {
               )}
 
               {currentLayoutConfig?.usesBackgroundPhotos && (
-                <div className="flex-1">
+                <div className="flex-1 flex-shrink-0">
                   <label className="block text-sm font-medium text-gray-700">Photos (Background)</label>
                   <div
                     {...getBackgroundRootProps()}
-                    className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md cursor-pointer"
+                    className="mt-1 flex justify-center p-4 border-2 border-gray-300 border-dashed rounded-md cursor-pointer"
                   >
                     <input {...getBackgroundInputProps()} />
                     {isBackgroundDragActive ? (
                       <p className="text-primary-600 text-xs font-bold">Solte os arquivos aqui ...</p>
                     ) : (
-                      <p className="text-center text-gray-500 text-xs">
+                      <p className="text-center text-gray-500 text-xs" style={{ wordBreak: 'break-word' }}>
                         <span className="font-bold">Arraste e solte arquivos aqui, ou clique para selecionar arquivos.</span><br /><br />
                         <span className="text-xs">Max: {MAX_FILE_SIZE_MB}MB por arquivo. Não há limite de dimensões de imagem.</span>
                       </p>
@@ -332,7 +332,7 @@ export default function CreateExperiencePage() {
           )}
 
           {/* Action Buttons: Create Experience and Logout */}
-          <div className="flex flex-col md:flex-row gap-4 mt-auto pt-4">
+          <div className="flex flex-col md:flex-row gap-4 mt-auto pt-4 flex-shrink-0">
             <button
               type="submit"
               className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 flex-1"

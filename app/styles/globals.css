@@ -118,13 +118,71 @@
 
 /* Base styles */
 html, body {
-  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
   margin: 0;
   padding: 0;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background-color: var(--color-background);
+  background-color: var(--color-background) !important;
   color: var(--color-text);
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#__next {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+html {
+  overflow-x: hidden !important;
+}
+
+/* Universal box-sizing and overflow fix */
+* {
+  box-sizing: border-box;
+  max-width: 100vw;
+  word-break: break-word;
+}
+
+/* Ensure flex and grid items can shrink */
+.flex > *, .grid > * {
+  min-width: 0;
+}
+
+/* Ensure images don't cause horizontal overflow */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Typing animation keyframes */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+/* Typing animation cursor blink */
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: currentColor } /* Using currentColor for better theme integration */
+}
+
+/* Base styles for typing text */
+.typing-text-hidden {
+  overflow: hidden;
+  white-space: nowrap;
+  width: 0; /* Initial state */
+}
+
+/* Class to activate typing animation */
+.typing-animation-active {
+  animation: typing 0.7s steps(15, end) forwards;
+}
+
+/* Class to show blinking cursor */
+.blinking-cursor {
+  border-right: .15em solid currentColor;
+  animation: blink-caret .75s step-end infinite;
 }
 
 /* Custom scrollbar styles */
