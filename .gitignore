@@ -38,3 +38,7 @@ yarn-error.log*
 # local development
 # Ignora a pasta de uploads que você usa para imagens de teste
 public/uploads/
+
+# logs and temporary files
+*.trace
+*.gz
