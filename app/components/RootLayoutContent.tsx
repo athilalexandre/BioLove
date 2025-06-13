@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useTheme } from '../context/ThemeContext';
-import { SunIcon, MoonIcon, GithubIcon, LinkedinIcon, MailIcon } from 'lucide-react';
+import { SunIcon, MoonIcon, GithubIcon } from 'lucide-react';
 
 export default function RootLayoutContent({
   children,
@@ -19,66 +19,56 @@ export default function RootLayoutContent({
   }, []);
 
   return (
-    <div className={`min-h-screen flex flex-col ${theme === 'dark' ? 'dark' : ''}`}>
-      <header className="w-full py-4 px-6 flex justify-between items-center bg-background border-b border-neutral-200 dark:border-neutral-700 transition-colors duration-300">
-        <Link href="/" className="text-2xl font-serif font-bold text-primary-600 dark:text-primary-400">
-          Mamoriae
-        </Link>
-        {isMounted && (
-          <button
-            onClick={toggleTheme}
-            className="p-2 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors duration-300"
-            aria-label="Toggle theme"
-          >
-            {theme === 'dark' ? (
-              <SunIcon size={20} className="text-yellow-500" />
-            ) : (
-              <MoonIcon size={20} className="text-blue-700" />
-            )}
-          </button>
-        )}
-      </header>
-      <main className="flex-grow overflow-auto custom-scrollbar" style={{ backgroundColor: colorPalette.background, color: colorPalette.text }}>
+    <div className={`min-h-screen flex flex-col ${theme === 'dark' ? 'dark' : ''}`} style={{ backgroundColor: colorPalette.background }}>
+      <main className="flex-grow overflow-auto custom-scrollbar" style={{ color: colorPalette.text }}>
         {children}
       </main>
-      <footer 
-        className="w-full py-8 px-6 bg-gradient-to-r from-primary-700 to-primary-900 text-primary-50 dark:from-neutral-800 dark:to-neutral-900 dark:text-neutral-300 transition-colors duration-300"
+      <footer
+        className="w-full py-1 px-2 bg-gradient-to-r from-primary-700 to-primary-900 text-primary-50 dark:from-neutral-800 dark:to-neutral-900 dark:text-neutral-300 transition-colors duration-300 relative overflow-hidden"
         style={{
           background: `linear-gradient(to right, ${colorPalette.primary}, ${colorPalette.primary} 70%, ${colorPalette.accent})`,
           color: colorPalette.buttonText,
         }}
       >
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-          <div className="text-center md:text-left">
-            <p>&copy; {new Date().getFullYear()} Mamoriae. Todos os direitos reservados.</p>
-            <p className="text-sm mt-1">Construído com ❤️ para preservar suas memórias.</p>
+        {/* Subtle decorative elements */}
+        <div className="absolute top-0 left-0 w-12 h-12 bg-primary-300 dark:bg-neutral-600 rounded-full opacity-10"></div>
+        <div className="absolute bottom-0 right-0 w-16 h-16 bg-primary-400 dark:bg-neutral-700 rounded-full opacity-10"></div>
+
+        <div className="max-w-6xl mx-auto relative z-10 flex flex-col md:flex-row justify-between items-center space-y-1 md:space-y-0 text-xs">
+          {/* Branding & Copyright */}
+          <div>
+            <p className="text-base font-serif font-bold mb-0.5">Mamoriae</p>
+            <p className="text-xs tracking-wide leading-relaxed">Construído com ❤️ para preservar suas memórias.</p>
+            <p className="text-xs mt-0.5 text-primary-100 dark:text-neutral-400">&copy; {new Date().getFullYear()} Todos os direitos reservados.</p>
           </div>
-          <div className="flex space-x-6">
-            <a 
-              href="https://github.com/your-github"
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="hover:text-primary-200 dark:hover:text-neutral-100 transition-colors duration-200"
-              aria-label="GitHub"
-            >
-              <GithubIcon size={24} />
-            </a>
-            <a 
-              href="https://linkedin.com/in/your-linkedin"
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="hover:text-primary-200 dark:hover:text-neutral-100 transition-colors duration-200"
-              aria-label="LinkedIn"
-            >
-              <LinkedinIcon size={24} />
-            </a>
-            <a 
-              href="mailto:your-email@example.com"
-              className="hover:text-primary-200 dark:hover:text-neutral-100 transition-colors duration-200"
-              aria-label="Email"
-            >
-              <MailIcon size={24} />
-            </a>
+
+          <div className="flex items-center space-x-2">
+            {/* Vertical Separator (only for md and up) */}
+            <div className="hidden md:block w-px bg-primary-200 dark:bg-neutral-500 h-8"></div>
+
+            {/* Social Icons */}
+            <div className="flex flex-col space-y-1 items-center">
+              <a
+                href="https://github.com/athilalexandre"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-1 text-primary-50 hover:text-primary-200 dark:hover:text-neutral-100 transition-colors duration-200 group"
+                aria-label="GitHub - Athila Alexandre"
+              >
+                <GithubIcon size={12} className="text-white group-hover:scale-110 transition-transform duration-200" />
+                <span className="text-xs font-semibold">Athila Alexandre</span>
+              </a>
+              <a
+                href="https://github.com/Crawfordcorp"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-1 text-primary-50 hover:text-primary-200 dark:hover:text-neutral-100 transition-colors duration-200 group"
+                aria-label="GitHub - David Aleixo"
+              >
+                <GithubIcon size={12} className="text-white group-hover:scale-110 transition-transform duration-200" />
+                <span className="text-xs font-semibold">David Aleixo</span>
+              </a>
+            </div>
           </div>
         </div>
       </footer>
