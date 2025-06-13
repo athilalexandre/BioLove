@@ -280,10 +280,10 @@ export default function CreateExperiencePage() {
                   >
                     <input {...getInputProps()} />
                     {isDragActive ? (
-                      <p className="text-primary-600">Solte os arquivos aqui ...</p>
+                      <p className="text-primary-600 text-xs font-bold">Solte os arquivos aqui ...</p>
                     ) : (
-                      <p className="text-center text-gray-500">
-                        Arraste e solte arquivos aqui, ou clique para selecionar arquivos.<br />
+                      <p className="text-center text-gray-500 text-xs">
+                        <span className="font-bold">Arraste e solte arquivos aqui, ou clique para selecionar arquivos.</span><br /><br />
                         <span className="text-xs">Max: {MAX_FILE_SIZE_MB}MB por arquivo. Não há limite de dimensões de imagem.</span>
                       </p>
                     )}
@@ -307,10 +307,10 @@ export default function CreateExperiencePage() {
                   >
                     <input {...getBackgroundInputProps()} />
                     {isBackgroundDragActive ? (
-                      <p className="text-primary-600">Solte os arquivos aqui ...</p>
+                      <p className="text-primary-600 text-xs font-bold">Solte os arquivos aqui ...</p>
                     ) : (
-                      <p className="text-center text-gray-500">
-                        Arraste e solte arquivos aqui, ou clique para selecionar arquivos.<br />
+                      <p className="text-center text-gray-500 text-xs">
+                        <span className="font-bold">Arraste e solte arquivos aqui, ou clique para selecionar arquivos.</span><br /><br />
                         <span className="text-xs">Max: {MAX_FILE_SIZE_MB}MB por arquivo. Não há limite de dimensões de imagem.</span>
                       </p>
                     )}
