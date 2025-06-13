@@ -203,27 +203,27 @@ export default function CreateExperiencePage() {
         <form onSubmit={handleSubmit} className="space-y-4 flex-grow flex flex-col overflow-x-hidden">
           {/* Title and Music URL */}
           <div className="flex flex-col space-y-4 flex-shrink-0">
-            <div className="flex-1 min-w-0">
+            <div className="flex-1">
               <label htmlFor="title" className="block text-sm font-medium text-gray-700">Title</label>
               <input
                 type="text"
                 id="title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                className="mt-1 block w-full min-w-0 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                 placeholder="Enter a title for the experience"
                 required
               />
             </div>
 
-            <div className="flex-1 min-w-0">
+            <div className="flex-1">
               <label htmlFor="musicUrl" className="block text-sm font-medium text-gray-700">Music URL (YouTube)</label>
               <input
                 type="url"
                 id="musicUrl"
                 value={musicUrl}
                 onChange={(e) => setMusicUrl(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                className="mt-1 block w-full min-w-0 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                 placeholder="Enter YouTube URL"
                 required
               />
@@ -238,7 +238,7 @@ export default function CreateExperiencePage() {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               rows={4}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+              className="mt-1 block w-full min-w-0 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
               maxLength={MAX_MESSAGE_LENGTH}
               required
             ></textarea>
