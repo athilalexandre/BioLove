@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createSession } from '@/lib/session'; // Import createSession
+import { GithubIcon } from 'lucide-react'; // Import GithubIcon
+import { useTheme } from '@/app/context/ThemeContext'; // Import useTheme
 
 // Simple admin credentials (in a real app, these would be stored securely)
 const ADMIN_EMAIL = 'athilalexandre@gmail.com';
@@ -13,6 +15,7 @@ export default function AdminLogin() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const { colorPalette } = useTheme(); // Use the theme context
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,29 +38,30 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
-        <h1 className="text-3xl font-bold text-center text-primary-800 mb-6">Admin Login</h1>
-        <form onSubmit={handleLogin} className="space-y-4">
+    <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md flex flex-col justify-between h-[30rem]"> {/* Added flex-col, justify-between, and a fixed height for better layout */} 
+        <h1 className="text-5xl font-limelight font-extrabold tracking-wide text-center mb-6 transition-colors duration-200" style={{ color: colorPalette.text }}>Memoriae</h1>
+        <h2 className="text-xl font-bold text-center text-primary-800 pb-2 border-b border-gray-300 mb-6">Admin Login</h2>
+        <form onSubmit={handleLogin} className="space-y-4 flex-grow">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+            <label htmlFor="email" className="block text-sm font-medium text-text">Email</label>
             <input
               type="email"
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+              className="mt-1 block w-full px-3 py-2 border border-inputBorder rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm text-inputText bg-inputBg"
               required
             />
           </div>
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+            <label htmlFor="password" className="block text-sm font-medium text-text">Password</label>
             <input
               type="password"
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+              className="mt-1 block w-full px-3 py-2 border border-inputBorder rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm text-inputText bg-inputBg"
               required
             />
           </div>
@@ -71,6 +75,28 @@ export default function AdminLogin() {
             Login
           </button>
         </form>
+        <div className="flex flex-row items-center justify-center space-x-4 mt-6">
+          <a
+            href="https://github.com/athilalexandre"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center group text-primary-500 dark:text-primary-300 hover:text-primary-700 dark:hover:text-primary-500 transition-colors duration-200"
+            aria-label="GitHub - Athila Alexandre"
+          >
+            <GithubIcon size={20} className="transition-transform duration-200 group-hover:scale-110" style={{ color: colorPalette.text }}/>
+            <span className="ml-1 text-sm font-brunson font-semibold typing-text-hidden max-w-full" style={{ color: colorPalette.text }}>Athila Alexandre</span>
+          </a>
+          <a
+            href="https://github.com/Crawfordcorp"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center group text-primary-500 dark:text-primary-300 hover:text-primary-700 dark:hover:text-primary-500 transition-colors duration-200"
+            aria-label="GitHub - David Aleixo"
+          >
+            <GithubIcon size={20} className="transition-transform duration-200 group-hover:scale-110" style={{ color: colorPalette.text }}/>
+            <span className="ml-1 text-sm font-brunson font-semibold typing-text-hidden max-w-full" style={{ color: colorPalette.text }}>David Aleixo</span>
+          </a>
+        </div>
       </div>
     </div>
   );

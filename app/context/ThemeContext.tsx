@@ -26,19 +26,19 @@ interface ThemeContextType {
 }
 
 const defaultLightPalette: ColorPalette = {
-  primary: '#6B46C1',
+  primary: '#673AB7',
   secondary: '#F0EEF5',
   accent: '#8A2BE2',
-  neutral: '#D8D3E0',
-  background: '#F8F9FA',
+  neutral: '#F5F5F5',
+  background: '#FFFFFF',
   text: '#2D3748',
   inputBg: '#F7FAFC',
   inputBorder: '#E2E8F0',
   inputText: '#2D3748',
-  buttonBg: '#6B46C1',
+  buttonBg: '#673AB7',
   buttonText: '#FFFFFF',
-  buttonHover: '#553C9A',
-  buttonFocus: '#44337A',
+  buttonHover: '#5E35B1',
+  buttonFocus: '#4527A0',
 };
 
 const defaultDarkPalette: ColorPalette = {

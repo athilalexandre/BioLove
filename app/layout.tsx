@@ -28,7 +28,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
-      <body className={`${inter.variable} ${playfair.variable} font-sans overflow-x-hidden`}>
+      <body className={`${inter.variable} ${playfair.variable} font-sans overflow-x-hidden`} style={{ backgroundColor: 'white !important' }}>
         <Providers>{children}</Providers>
       </body>
     </html>
